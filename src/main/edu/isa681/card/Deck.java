@@ -1,6 +1,7 @@
 package edu.isa681.card;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Deck {
     ArrayList<Card> cards;
@@ -16,5 +17,14 @@ public class Deck {
                 cards.add(card);
             }
         }
+    }
+
+    public Deck shuffleDeck() {
+        Collections.shuffle(cards);
+        return this;
+    }
+
+    public ArrayList<Card> getCards() {
+        return cards;
     }
 }
