@@ -5,11 +5,11 @@ import edu.isa681.game.types.GameSymbols;
 
 public class Card {
     CardType cardType;
-    GameSymbols gameSymbols;
+    GameSymbols cardValue;
 
-    Card(CardType cardType, GameSymbols gameSymbols) {
+    Card(CardType cardType, GameSymbols cardValue) {
         this.cardType = cardType;
-        this.gameSymbols = gameSymbols;
+        this.cardValue = cardValue;
     }
 
     public CardType getCardType() {
@@ -22,7 +22,7 @@ public class Card {
 
     public boolean equals(Object obj){
         if (obj instanceof Card){
-            return ((Card) obj).cardType == this.cardType && ((Card) obj).gameSymbols == this.gameSymbols;
+            return ((Card) obj).cardType == this.cardType && ((Card) obj).cardValue == this.cardValue;
         }
         return false;
     }

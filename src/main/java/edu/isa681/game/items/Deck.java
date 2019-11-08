@@ -24,19 +24,21 @@ public class Deck {
      * traditional card games
      */
     private void generateDeck() {
-        for (int i = 0; i < 2; i++) {
-            for (CardType cardType : CardType.values()) {
+
+        for (CardType cardType : CardType.allowedInDeck()) {
+            for (int i = 0; i < 2; i++) {
                 for (GameSymbols gameSymbols : GameSymbols.allowedInDeck()) {
                     Card card = new Card(cardType, gameSymbols);
                     cards.add(card);
                 }
-                cards.add(new Card(cardType, GameSymbols.JackOneEye));
-                cards.add(new Card(cardType, GameSymbols.JackTwoEye));
+
             }
+            cards.add(new Card(cardType, GameSymbols.JackOneEye));
+            cards.add(new Card(cardType, GameSymbols.JackTwoEye));
         }
 
         if (this.cards.size() != 104) {
-            throw new IllegalStateException("Cards not initiated properly. ");
+            throw new IllegalStateException("Cards not initiated properly." + this.cards.size());
         }
     }
 
@@ -55,4 +57,5 @@ public class Deck {
     public List<Card> getCards() {
         return cards;
     }
+
 }
