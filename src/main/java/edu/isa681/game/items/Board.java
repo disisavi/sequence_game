@@ -6,7 +6,6 @@ import edu.isa681.game.types.Chips;
 import edu.isa681.game.types.GameSymbols;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,11 +14,15 @@ import java.util.List;
 public class Board {
     public final static Integer Max_Rows = 10;
     public final static Integer Max_Cols = 10;
+    private final static Integer Max_Moves = 104;
+
+    public Integer boardState;
     public Cell[][] cells;
 
     public Board() {
         cells = new Cell[Max_Rows][Max_Cols];
         generateGrid();
+        boardState = 0;
     }
 
     private void generateGrid() {
@@ -51,12 +54,20 @@ public class Board {
         return boardSequence;
     }
 
+    public void incrementBoardState() throws Exception {
+        if (boardState == Max_Moves) {
+            throw new Exception("All the moves has been made. Game is over");
+        }
+
+        boardState++;
+    }
+
     private List<Point> get4Edges() {
         return new ArrayList<Point>(Arrays.asList((new Point(0, 0)), (new Point(0, Max_Cols - 1))
                 , (new Point(Max_Rows - 1, 0)), (new Point(Max_Rows - 1, Max_Cols - 1))));
     }
 
-    public void putChip(Point point, Chips chip) {
+    public void putChip(Point point, Chips chip) throws Exception {
         Boolean onOrOverEdge = false;
         for (Point edge : get4Edges()) {
             if ((edge.x <= point.x) || (edge.y <= point.y)) {
@@ -73,14 +84,37 @@ public class Board {
         } else {
             throw new IllegalStateException("Some Chip is already been put at the point");
         }
+
+        incrementBoardState();
     }
 
-    public Card getCellCardType(Point point){
+    public Card getCellCardType(Point point) {
         return this.cells[point.x][point.y].cellCardType;
     }
 
+    public Chips isSequence() {
+        for (int i = 0; i < Max_Rows; i++) {
+            for (int j = 0; j < Max_Cols; j++) {
+                if (isPointInSequence(new Point(i, j))) {
+                    return cells[i][j].chip;
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean isPointInSequence(Point point) {
+        Integer numberInSequence;
+        Cell cell = cells[point.x][point.y];
+        if (cell.cellCardType.cardType == CardType.Generic) {
+            numberInSequence = 4;
+        } else {
+            numberInSequence = 5;
+        }
+        return true;
+    }
+
     private class Cell {
-        Card card;
         Chips chip;
         Card cellCardType;
 

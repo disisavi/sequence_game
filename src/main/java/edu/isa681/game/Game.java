@@ -6,6 +6,7 @@ import edu.isa681.DOA.entity.type.PlayerSate;
 import edu.isa681.game.items.Board;
 import edu.isa681.game.items.Card;
 import edu.isa681.game.items.Deck;
+import edu.isa681.game.types.CardType;
 import edu.isa681.game.types.Chips;
 import org.apache.log4j.Logger;
 
@@ -67,15 +68,21 @@ public class Game {
         return this.playersGameSessions.get(turnIndex);
     }
 
-    public void placeChip(PlayerGameSession playerGameSession, Point point, Integer cardIndex) {
-        try {
-            Card card = playerGameSession.getCardsList().get(cardIndex);
-            if (card.equals(this.board.getCellCardType(point))){
-                this.board.putChip(point,playerGameSession.getChip());
-            }else throw new IllegalStateException("Chip Type Mismatch");
-        }catch (ArrayIndexOutOfBoundsException ex){
-            throw new ArrayIndexOutOfBoundsException("Card position given is out of bound... No card of such an index exist");
-        }
-    }
+    public void placeChip(PlayerGameSession playerGameSession, Point point, Integer cardIndex) throws Exception {
 
+        //Still have to incorporate joker rules
+        if (playersGameSessions.indexOf(playerGameSession) == turnIndex) {
+            try {
+                Card card = playerGameSession.getCardsList().get(cardIndex);
+                if (card.equals(this.board.getCellCardType(point))) {
+                    this.board.putChip(point, playerGameSession.getChip());
+                } else throw new IllegalStateException("Chip Type Mismatch");
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                throw new ArrayIndexOutOfBoundsException("Card position given is out of bound... No card of such an index exist");
+            } catch (Exception ex) {
+                log.info("Exception occured ", ex);
+                throw ex;
+            }
+        } else throw new IllegalArgumentException("The present player doesnt have turn right now.");
+    }
 }
