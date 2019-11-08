@@ -2,27 +2,30 @@ package edu.isa681.DOA.entity;
 
 import edu.isa681.game.Game;
 import edu.isa681.game.items.Card;
+import edu.isa681.game.types.Chips;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerGameSession {
-    List<Card> cardsFacingDownList;
-    List<Card> cardsFacingUpList;
+    List<Card> cardsList;
+    Chips chip;
+
+    Integer numberChipsAvailable;
     Player player;
     Game game;
 
     PlayerGameSession(Player player) {
         this.player = player;
-        this.cardsFacingDownList = new ArrayList<Card>();
+        this.cardsList = new ArrayList<Card>();
     }
 
-    public List<Card> getCardsFacingDownList() {
-        return cardsFacingDownList;
+    public List<Card> getCardsList() {
+        return cardsList;
     }
 
-    public void setCardsFacingDownList(List<Card> cardsFacingDownList) {
-        this.cardsFacingDownList = cardsFacingDownList;
+    public void setCardsList(List<Card> cardsList) {
+        this.cardsList = cardsList;
     }
 
     public Player getPlayer() {
@@ -41,16 +44,23 @@ public class PlayerGameSession {
         this.game = game;
     }
 
-    public List<Card> getCardsFacingUpList() {
-        return cardsFacingUpList;
+    public void addCard(Card card) {
+        this.cardsList.add(card);
     }
 
-    public void setCardsFacingUpList(List<Card> cardsFacingUpList) {
-        this.cardsFacingUpList = cardsFacingUpList;
+    public Chips getChip() {
+        return chip;
     }
 
-    public void addCard(Card card){
-        this.cardsFacingDownList.add(card);
+    public void setChip(Chips chip) {
+        this.chip = chip;
     }
 
+    public Integer getNumberChipsAvailable() {
+        return numberChipsAvailable;
+    }
+
+    public void setNumberChipsAvailable(Integer numberChipsAvailable) {
+        this.numberChipsAvailable = numberChipsAvailable;
+    }
 }

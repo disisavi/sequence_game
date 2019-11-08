@@ -31,7 +31,8 @@ public class Player {
         return matcher.matches();
     }
 
-    public PlayerGameSession getNewPlayerSession(){
+    public PlayerGameSession getNewPlayerSession() {
+        this.playerSate = PlayerSate.Playing;
         return new PlayerGameSession(this);
     }
 
