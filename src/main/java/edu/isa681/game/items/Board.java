@@ -1,14 +1,13 @@
 package edu.isa681.game.items;
 
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import edu.isa681.game.types.CardType;
 import edu.isa681.game.types.Chips;
 import edu.isa681.game.types.GameSymbols;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
 
 public class Board {
@@ -54,7 +53,7 @@ public class Board {
         return boardSequence;
     }
 
-    public void incrementBoardState() throws Exception {
+    private void incrementBoardState() throws Exception {
         if (boardState == Max_Moves) {
             throw new Exception("All the moves has been made. Game is over");
         }
@@ -67,13 +66,24 @@ public class Board {
                 , (new Point(Max_Rows - 1, 0)), (new Point(Max_Rows - 1, Max_Cols - 1))));
     }
 
+    private Boolean isInBoard(Point point) {
+        if (point.x >= cells.length && point.y >= cells[0].length) {
+            return true;
+        }
+        return false;
+    }
+
     public void putChip(Point point, Chips chip) throws Exception {
         Boolean onOrOverEdge = false;
-        for (Point edge : get4Edges()) {
-            if ((edge.x <= point.x) || (edge.y <= point.y)) {
-                onOrOverEdge = true;
-                break;
+        if (isInBoard(point)) {
+            for (Point edge : get4Edges()) {
+                if ((edge.x <= point.x) || (edge.y <= point.y)) {
+                    onOrOverEdge = true;
+                    break;
+                }
             }
+        } else {
+            onOrOverEdge = true;
         }
         if (onOrOverEdge) {
             throw new IllegalStateException("Point Chosen is over the edge");
@@ -92,15 +102,15 @@ public class Board {
         return this.cells[point.x][point.y].cellCardType;
     }
 
-    public Chips isSequence() {
+    public AbstractMap.SimpleEntry<Boolean, Chips> isSequence() {
         for (int i = 0; i < Max_Rows; i++) {
             for (int j = 0; j < Max_Cols; j++) {
                 if (isPointInSequence(new Point(i, j))) {
-                    return cells[i][j].chip;
+                    return new AbstractMap.SimpleEntry<>(true, cells[i][j].chip);
                 }
             }
         }
-        return null;
+        return new AbstractMap.SimpleEntry<>(false, null);
     }
 
     private boolean isPointInSequence(Point point) {
@@ -114,6 +124,10 @@ public class Board {
         return true;
     }
 
+    private Boolean searchForSequence(DirectionSearch direction) {
+        return true;
+    }
+
     private class Cell {
         Chips chip;
         Card cellCardType;
@@ -121,5 +135,9 @@ public class Board {
         Cell(Card cellCardType) {
             this.cellCardType = cellCardType;
         }
+    }
+
+    private enum DirectionSearch {
+        Vertical, Horizontal, Diagonal;
     }
 }
