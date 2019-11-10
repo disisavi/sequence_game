@@ -4,20 +4,35 @@ import edu.isa681.game.Game;
 import edu.isa681.game.items.Card;
 import edu.isa681.game.types.Chips;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerGameSession {
     List<Card> cardsList;
     Chips chip;
-
     Integer numberChipsAvailable;
     Player player;
     Game game;
 
+    void placeChip(Point point, Integer cardIndex) {
+        if (cardsList.size() > cardIndex && cardIndex > -1) {
+            this.game.placeChip(this, point, cardIndex);
+        } else {
+            System.out.println("Card position given is out of bound... No card of such an index exist");
+            System.out.println("Tried to get card -- " + cardIndex + " out of a total " + this.cardsList.size());
+            throw new ArrayIndexOutOfBoundsException("Card position given is out of bound... No card of such an index exist");
+        }
+    }
+
     PlayerGameSession(Player player) {
         this.player = player;
-        this.cardsList = new ArrayList<Card>();
+        this.cardsList = new ArrayList<>();
+    }
+
+    public void pickNextCard(Card cardToThrow, Card cardToPick) {
+        cardsList.remove(cardToThrow);
+        cardsList.add(cardToPick);
     }
 
     public List<Card> getCardsList() {

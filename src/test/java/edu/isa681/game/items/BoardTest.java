@@ -24,17 +24,16 @@ class BoardTest {
 
     @Test
     void putChip() {
-        try {
-            Point finalPoint = new Point(0, 1);
-            board.putChip(finalPoint, Chips.Green);
+        Point finalPoint = new Point(0, 1);
+        board.putChip(finalPoint, Chips.Green);
 
-            assertThrows(IllegalStateException.class, () -> board.putChip(finalPoint, Chips.Green));
+        assertThrows(IllegalStateException.class, () -> board.putChip(finalPoint, Chips.Green));
 
-            Point finalPoint1 = new Point(0, 10);
-            assertThrows(IllegalStateException.class, () -> board.putChip(finalPoint1, Chips.Green));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Point finalPoint1 = new Point(0, 10);
+        assertThrows(IllegalStateException.class, () -> board.putChip(finalPoint1, Chips.Green));
+
+        Point finalPoint2 = new Point(0, 0);
+        assertThrows(IllegalStateException.class, () -> board.putChip(finalPoint2, Chips.Green));
     }
 
     @Test

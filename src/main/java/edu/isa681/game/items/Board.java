@@ -14,15 +14,12 @@ public class Board {
     static final Logger log = Logger.getLogger(Board.class);
     public final static Integer Max_Rows = 10;
     public final static Integer Max_Cols = 10;
-    private final static Integer Max_Moves = 104;
 
-    public Integer boardState;
     public Cell[][] cells;
 
     public Board() {
         cells = new Cell[Max_Rows][Max_Cols];
         generateGrid();
-        boardState = 0;
     }
 
     private void generateGrid() {
@@ -41,6 +38,14 @@ public class Board {
         }
     }
 
+    public List<Cell> generateBoardSnapshot() {
+        List<Cell> returnList = new ArrayList<Cell>();
+        for (Cell[] cells : this.cells) {
+            Collections.addAll(returnList, cells);
+        }
+        return returnList;
+    }
+
     private List<Card> getBoardSequence() {
         List<Card> boardSequence = new ArrayList<>();
         for (int __i = 0; __i < 2; __i++) {
@@ -52,13 +57,6 @@ public class Board {
         return boardSequence;
     }
 
-    private void incrementBoardState() throws Exception {
-        if (boardState == Max_Moves) {
-            throw new Exception("All the moves has been made. Game is over");
-        }
-
-        boardState++;
-    }
 
     /***
      *
@@ -73,30 +71,40 @@ public class Board {
         return point.x >= 0 && point.x < Max_Cols && point.y >= 0 && point.y < Max_Rows;
     }
 
-    public void putChip(Point point, Chips chip) throws Exception {
+    private Boolean onOrOverEdge(Point point) {
         Boolean onOrOverEdge = false;
         if (isInBoard(point)) {
             for (Point edge : get4Edges()) {
                 if (edge.equals(point)) {
                     onOrOverEdge = true;
+                    break;
                 }
             }
         } else {
             onOrOverEdge = true;
         }
-        if (onOrOverEdge) {
-            throw new IllegalStateException("Point Chosen is over the edge");
+        return onOrOverEdge;
+    }
+
+    public void putChip(Point point, Chips chip) {
+        if (onOrOverEdge(point)) {
+            throw new IllegalStateException("Point Chosen is not a valid point to put chip on the board");
         }
 
-        if (
-
-                getCellFromPoint(point).chip == null) {
+        if (getCellFromPoint(point).chip == null) {
             getCellFromPoint(point).chip = chip;
         } else {
-            throw new IllegalStateException("Some Chip is already been put at the point");
+            throw new IllegalStateException("Chip already exist at the point");
         }
 
-        incrementBoardState();
+    }
+
+    public void removeChip(Point point) {
+        if (onOrOverEdge(point)) {
+            throw new IllegalStateException("Point Chosen is not a valid point to remove chip from the board");
+        }
+
+        getCellFromPoint(point).chip = null;
     }
 
     public Card getCellCardType(Point point) {
@@ -146,7 +154,7 @@ public class Board {
         return false;
     }
 
-    class Cell {
+    public class Cell {
         Chips chip;
         final Card cellCardType;
 
@@ -167,10 +175,4 @@ public class Board {
             return point;
         }
     }
-
-    /*
-     * TODO
-     * 1. Please finish the search algorithm of the board
-     * 1. Write tests
-     */
 }

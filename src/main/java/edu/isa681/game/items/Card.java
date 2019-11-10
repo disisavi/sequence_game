@@ -13,14 +13,6 @@ public class Card {
         this.cardValue = cardValue;
     }
 
-    public CardType getCardType() {
-        return cardType;
-    }
-
-    public void setCardType(CardType cardType) {
-        this.cardType = cardType;
-    }
-
     public boolean equals(Object obj) {
         if (obj instanceof Card) {
             if (this.cardValue == GameSymbols.JackOneEye || this.cardValue == GameSymbols.JackTwoEye) {
@@ -31,4 +23,22 @@ public class Card {
         }
         return false;
     }
+
+    public GameSymbols getCardValue() {
+        return cardValue;
+    }
+
+    public void setCardValue(GameSymbols cardValue) {
+        this.cardValue = cardValue;
+    }
+
+    public CardType getCardType() {
+        return cardType;
+    }
+
+    public void setCardType(CardType cardType) {
+        this.cardType = cardType;
+    }
+
+
 }
