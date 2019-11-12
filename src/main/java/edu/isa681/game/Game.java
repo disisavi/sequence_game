@@ -6,51 +6,61 @@ import edu.isa681.DOA.entity.type.PlayerSate;
 import edu.isa681.game.items.Board;
 import edu.isa681.game.items.Card;
 import edu.isa681.game.items.Deck;
-import edu.isa681.game.types.CardType;
 import edu.isa681.game.types.Chips;
+import edu.isa681.game.types.GameSymbols;
 import org.apache.log4j.Logger;
 
+
 import java.awt.*;
+import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 public class Game {
     final static Logger log = Logger.getLogger(Game.class);
     private Deck deck;
-    private Board board;
+    Board board;
     ArrayList<PlayerGameSession> playersGameSessions;
     Integer turnIndex;
+    GameState gameState;
 
     public Game(Player[] players) {
-
+        log.info("New Game being created.");
+        if (players.length != 3) {
+            throw new IllegalStateException("Invalid Number of players. Exactly 3 players allowed to play the game.");
+        }
+        playersGameSessions = new ArrayList<>();
         initPlayerSession(players);
-        Set<Chips> chips = Chips.availableChips();
-        playersGameSessions.forEach(player -> {
+        Chips[] chips = Chips.values();
+        for (int i = 0; i < playersGameSessions.size(); i++) {
+            PlayerGameSession player = playersGameSessions.get(i);
             player.setGame(this);
-            player.setChip(chips.iterator().next());
-        });
+            player.setChip(chips[i]);
+        }
         turnIndex = 0;
-
-        board = new Board();
+        this.board = new Board();
+        this.deck = new Deck();
+        this.gameState = new GameState(this);
+        log.info("Game creation complete.");
     }
 
     private void initPlayerSession(Player[] players) {
-        log.info("New game initiation started");
+        log.info("New Player session initiation started");
         for (Player player : players) {
             if (player.getPlayerSate() == PlayerSate.Online) {
                 this.playersGameSessions.add(player.getNewPlayerSession());
-                this.deck = new Deck();
+                log.info("Session for Player " + player.getName() + "Initiated");
             } else {
                 IllegalStateException exception = new IllegalStateException("Player " + player.getName() + " is not available to play a game right now");
                 log.info("Game initiation failed ", exception);
                 throw exception;
             }
         }
+        log.info("All players initiated");
     }
 
 
     public void distributeCards() {
+        log.info("Distribute 6 cards to each player");
         for (int __i = 0; __i < 6; __i++) {
             for (PlayerGameSession playerGameSession : playersGameSessions) {
                 playerGameSession.addCard(this.deck.dealCard());
@@ -58,31 +68,70 @@ public class Game {
         }
     }
 
-    public PlayerGameSession nextTurn() {
+    private PlayerGameSession nextTurn() {
         if (turnIndex == this.playersGameSessions.size() - 1) {
             turnIndex = 0;
         } else {
             turnIndex++;
         }
-
+        log.info("Next turn index is " + turnIndex);
         return this.playersGameSessions.get(turnIndex);
     }
 
-    public void placeChip(PlayerGameSession playerGameSession, Point point, Integer cardIndex) throws Exception {
-
-        //Still have to incorporate joker rules
+    public void placeChip(PlayerGameSession playerGameSession, Point point, Integer cardIndex) {
+        log.info("Player " + playerGameSession.getPlayer().getName() + " has initiated next move");
         if (playersGameSessions.indexOf(playerGameSession) == turnIndex) {
             try {
                 Card card = playerGameSession.getCardsList().get(cardIndex);
-                if (card.equals(this.board.getCellCardType(point))) {
+                if (card.equals(this.board.getCellCardType(point)) || card.getCardValue() == GameSymbols.JackTwoEye) {
                     this.board.putChip(point, playerGameSession.getChip());
-                } else throw new IllegalStateException("Chip Type Mismatch");
+                } else if (card.getCardValue() == GameSymbols.JackOneEye) {
+                    this.board.removeChip(point);
+                } else {
+                    IllegalStateException ex = new IllegalStateException("The position does not match the Card selected");
+                    log.info("Selected Card -- " + card.getCardValue() + "-" + card.getCardType() + " _ Card at position " + point.toString()
+                            + " is " + this.board.getCellCardType(point).getCardValue() + "-" + this.board.getCellCardType(point).getCardType(), ex);
+                    throw ex;
+                }
+                Card cardToPick = deck.dealCard();
+                playerGameSession.pickNextCard(card, cardToPick);
             } catch (ArrayIndexOutOfBoundsException ex) {
+                log.info("Card position given is out of bound... No card of such an index exist");
+                log.info("Tried to get card -- " + cardIndex + " out of a total " + playerGameSession.getCardsList().size(), ex);
                 throw new ArrayIndexOutOfBoundsException("Card position given is out of bound... No card of such an index exist");
-            } catch (Exception ex) {
-                log.info("Exception occured ", ex);
+            } catch (IllegalStateException ex) {
+                log.info("Exception occurred ", ex);
                 throw ex;
             }
-        } else throw new IllegalArgumentException("The present player doesnt have turn right now.");
+        } else {
+            IllegalArgumentException ex = new IllegalArgumentException("The present player doesnt have turn right now.");
+            log.info("Wrong Player initiated the Move ", ex);
+            throw ex;
+        }
+        gameState.incrementBoardState();
+    }
+
+    public Boolean checkSequenceAndNextTurn(PlayerGameSession playerGameSession) {
+        log.info("Check for Sequence started");
+        AbstractMap.SimpleEntry<Boolean, Chips> isSequnce = board.isSequence();
+        if (isSequnce.getKey()) {
+            gameState.setSequenceDone(true);
+            if (isSequnce.getValue() == playerGameSession.getChip()) {
+                gameState.setPlayerWon(playerGameSession.getPlayer());
+                log.info("Valid Player won.");
+            } else {
+                log.info("Someone else won. Checking who won");
+                for (PlayerGameSession playerSession : this.playersGameSessions) {
+                    if (playerGameSession.getChip() == isSequnce.getValue()) {
+                        gameState.setPlayerWon(playerSession.getPlayer());
+                        log.info("Player " + playerGameSession.getPlayer().getName() + " won.");
+                        break;
+                    }
+                }
+            }
+            return true;
+        }
+        nextTurn();
+        return false;
     }
 }
