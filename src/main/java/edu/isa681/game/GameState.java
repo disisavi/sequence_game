@@ -8,7 +8,6 @@ import java.util.List;
 public class GameState {
     private final static Integer Max_Moves = 104;
     Integer boardVersionNumber;
-    Game game;
     Boolean isSequenceDone;
     List<Board.Cell> boardStateSnapShot;
 
@@ -16,14 +15,13 @@ public class GameState {
 
 
     public GameState(Game game) {
-        this.game = game;
         boardVersionNumber = 0;
         isSequenceDone = false;
         boardStateSnapShot = game.board.generateBoardSnapshot();
     }
 
 
-    void incrementBoardState() {
+    void incrementBoardState(Game game) {
         if (boardVersionNumber == Max_Moves) {
             throw new IllegalStateException("All the moves has been made. Game is over");
         }
@@ -37,14 +35,6 @@ public class GameState {
 
     public void setBoardVersionNumber(Integer boardVersionNumber) {
         this.boardVersionNumber = boardVersionNumber;
-    }
-
-    public Game game() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
     }
 
     public Boolean isSequenceDone() {

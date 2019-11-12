@@ -108,7 +108,7 @@ public class Board {
     }
 
     public Card getCellCardType(Point point) {
-        return this.cells[point.x][point.y].cellCardType;
+        return this.cells[point.x][point.y].cellType;
     }
 
     Cell getCellFromPoint(Point point) {
@@ -131,7 +131,7 @@ public class Board {
     private boolean isPointInSequence(Point point) {
         Integer numberInSequence;
         Cell cell = getCellFromPoint(point);
-        if (cell.cellCardType.cardValue == GameSymbols.CornerPocket) {
+        if (cell.cellType.cardValue == GameSymbols.CornerPocket) {
             numberInSequence = 4;
         } else {
             numberInSequence = 5;
@@ -155,11 +155,11 @@ public class Board {
     }
 
     public class Cell {
-        Chips chip;
-        final Card cellCardType;
+        public Chips chip;
+        final Card cellType;
 
-        Cell(Card cellCardType) {
-            this.cellCardType = cellCardType;
+        Cell(Card cellType) {
+            this.cellType = cellType;
         }
     }
 

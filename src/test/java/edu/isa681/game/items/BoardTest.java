@@ -1,13 +1,10 @@
 package edu.isa681.game.items;
 
-import edu.isa681.game.types.CardType;
 import edu.isa681.game.types.Chips;
-import edu.isa681.game.types.GameSymbols;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,7 +37,7 @@ class BoardTest {
     void getCellCardType() {
         for (Board.Cell[] cells : board.cells) {
             for (Board.Cell cell : cells) {
-                System.out.print(cell.cellCardType.cardType + "-" + cell.cellCardType.cardValue + "   ");
+                System.out.print(cell.cellType.cardType + "-" + cell.cellType.cardValue + "   ");
             }
             System.out.println();
         }

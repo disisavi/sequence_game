@@ -108,7 +108,7 @@ public class Game {
             log.info("Wrong Player initiated the Move ", ex);
             throw ex;
         }
-        gameState.incrementBoardState();
+        gameState.incrementBoardState(this);
     }
 
     public Boolean checkSequenceAndNextTurn(PlayerGameSession playerGameSession) {
@@ -134,4 +134,9 @@ public class Game {
         nextTurn();
         return false;
     }
+
+    public GameState getGameState() {
+        return gameState;
+    }
+
 }
