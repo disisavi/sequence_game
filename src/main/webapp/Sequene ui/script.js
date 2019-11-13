@@ -1,4 +1,6 @@
 console.log('It works!');
+boardContent = new Array(100);
+var i=0;
 imagesArray = new Array(24);
 imagesArray[0] = "images/2C.jpg";
 imagesArray[1] = "images/2D.jpg";
@@ -31,5 +33,24 @@ function loadImage()
 {
     var num = Math.floor(Math.random() * imagesArray.length);
     document.write('<img class="seq-img" src="'+imagesArray[num]+'"/>')
-  
+   /* console.log(imagesArray[num]);*/
+    boardContent[i] = imagesArray[num];
+    i++;
+   
+}
+function loadPlayerCard()
+{
+    var player = Math.floor(Math.random() * imagesArray.length);
+    for(i=0;i<100;i++)
+    {
+        if(boardContent[i]==imagesArray[player])
+        {
+        console.log('value matches');
+        document.write('<img class = "seq-player-img" draggable="true" src="'+imagesArray[player]+'" />');
+        return 0;
+        } 
+    else{
+        console.log('loading new value');
+    }
+    }
 }
