@@ -31,37 +31,37 @@ public class GameState {
         boardStateSnapShot = game.board.generateBoardSnapshot();
     }
 
-    public Integer boardVersionNumber() {
+    public void setPlayerWon(Player playerWon) {
+        if (isSequenceDone) {
+            this.playerWon = playerWon;
+        }
+    }
+
+    public Integer getBoardVersionNumber() {
         return boardVersionNumber;
+    }
+
+    public Boolean getSequenceDone() {
+        return isSequenceDone;
+    }
+
+    public List<Board.Cell> getBoardStateSnapShot() {
+        return boardStateSnapShot;
+    }
+
+    public Player getPlayerWon() {
+        return playerWon;
     }
 
     public void setBoardVersionNumber(Integer boardVersionNumber) {
         this.boardVersionNumber = boardVersionNumber;
     }
 
-    public Boolean isSequenceDone() {
-        return isSequenceDone;
-    }
-
     public void setSequenceDone(Boolean sequenceDone) {
         isSequenceDone = sequenceDone;
     }
 
-    public List<Board.Cell> boardStateSnapShot() {
-        return boardStateSnapShot;
-    }
-
     public void setBoardStateSnapShot(List<Board.Cell> boardStateSnapShot) {
         this.boardStateSnapShot = boardStateSnapShot;
-    }
-
-    public Player playerWon() {
-        return playerWon;
-    }
-
-    public void setPlayerWon(Player playerWon) {
-        if (isSequenceDone) {
-            this.playerWon = playerWon;
-        }
     }
 }

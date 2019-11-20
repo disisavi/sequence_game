@@ -1,5 +1,7 @@
 package edu.isa681.game;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import edu.isa681.DOA.entity.Player;
 import edu.isa681.DOA.entity.PlayerGameSession;
 import edu.isa681.DOA.entity.type.PlayerSate;
@@ -55,4 +57,10 @@ class GameTest {
         game.distributeCards();
         assertThrows(IllegalArgumentException.class, () -> game.placeChip(game.playersGameSessions.get(2), new Point(2, 2), 2));
     }
+
+//    @Test
+//    void game3(){
+//        JsonObject playersToAdd = new JsonParser().parse("{playerTokens:[{'playerToken':'sadf'}]}").getAsJsonObject();
+//        System.out.println(playersToAdd.toString());
+//    }
 }

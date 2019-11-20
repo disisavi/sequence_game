@@ -161,6 +161,10 @@ public class Board {
         Cell(Card cellType) {
             this.cellType = cellType;
         }
+
+        public Card getCellType() {
+            return cellType;
+        }
     }
 
     private enum DirectionSearch {
