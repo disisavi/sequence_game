@@ -1,3 +1,4 @@
+<%@ page import="edu.isa681.web.server.Params" %>
 <!doctype html>
 <html>
 <head>
@@ -16,16 +17,17 @@
             type="javascript"></script>
     <!-- Custom styles for this template -->
     <link href="style/stylesheet.css" rel="stylesheet"/>
-    <script src="https://apis.google.com/js/platform.js" defer async></script>
-    <meta name="google-signin-client_id" content="326140469666-jfos4rc28q1vo3c6d2mir28f8jfdlqce.apps.googleusercontent.com">
+    <script language="javascript">
+        <% String str=Params.getParam();%>
+    </script>
 </head>
-
 <body>
 <!--[if IE]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade
     your browser</a> to improve your experience and security.</p>
 <![endif]-->
-
+<div class="container">
+</div>
 <div class="container">
     <div class="jumbotron">
         <h1 class="display-4">Sequence is finally online!</h1>
@@ -35,8 +37,13 @@
         <p>For the puprpus of keeping user information and credentials as safe as posible, we use google provided single
             sign on service. Please use your google account to sign on.</p>
     </div>
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <form id='loginform' name="loginform" method="get"
+          action='<%=str%>'>
+        <button type="submit" class="btn btn-outline-primary">Primary</button>
+    </form>
 </div>
-<script src="./script/script.js" type="text/javascript"></script>
+<div class="container">
+</div>
+<script src="./script/script.js" onclick="" type="text/javascript"></script>
 </body>
 </html>

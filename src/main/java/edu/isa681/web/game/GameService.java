@@ -1,16 +1,13 @@
-package edu.isa681.web;
+package edu.isa681.web.game;
 
 import com.google.gson.*;
 import edu.isa681.DOA.entity.Player;
 import edu.isa681.DOA.entity.type.PlayerSate;
 import edu.isa681.game.Game;
 import edu.isa681.game.GameState;
-import org.codehaus.jackson.JsonNode;
 
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 
 @Path("/game")

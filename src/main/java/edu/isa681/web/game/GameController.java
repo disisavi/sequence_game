@@ -1,4 +1,4 @@
-package edu.isa681.web;
+package edu.isa681.web.game;
 
 import edu.isa681.DOA.entity.Player;
 import edu.isa681.game.Game;
