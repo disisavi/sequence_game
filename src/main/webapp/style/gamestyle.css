@@ -1,0 +1,21 @@
+.seq-game {
+    display: flex;
+    flex-wrap: wrap;
+    border: 4px solid black;
+    margin: auto;
+}
+
+.seq-card {
+    border: 2px solid blue;
+    width: 10%;
+    margin: 1px;
+}
+
+.seq-row {
+    width: 100%;
+    margin: auto;
+}
+
+#parentGrid {
+    margin-top: 10%;
+}

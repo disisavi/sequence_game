@@ -18,7 +18,7 @@
     <!-- Custom styles for this template -->
     <link href="style/stylesheet.css" rel="stylesheet"/>
     <script language="javascript">
-        <% String str=Params.getParam();%>
+        <% String param=Params.getLoginParam();%>
     </script>
 </head>
 <body>
@@ -38,7 +38,7 @@
             sign on service. Please use your google account to sign on.</p>
     </div>
     <form id='loginform' name="loginform" method="get"
-          action='<%=str%>'>
+          action='<%=param%>'>
         <button type="submit" class="btn btn-outline-primary">Primary</button>
     </form>
 </div>
