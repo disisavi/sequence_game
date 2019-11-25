@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/game")
 public class GameService {
-    GameController gameController;
+    private GameController gameController;
 
     @GET
     @Path("/getBoard")
