@@ -29,6 +29,17 @@
                 <artifactId>appengine-maven-plugin</artifactId>
                 <version>${appengine-maven-plugin-version}</version>
             </plugin>
+            <plugin>                          <!-- Used for local debugging -->
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jetty.maven.plugin}</version>
+                <configuration>
+                    <webApp>
+                        <overrideDescriptor>${project.build.directory}/${project.build.finalName}/WEB-INF/web.xml
+                        </overrideDescriptor>
+                    </webApp>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -40,6 +51,7 @@
         <appengine.app.version>1</appengine.app.version>
         <appengine.target.version>1.9</appengine.target.version>
         <appengine-maven-plugin-version>1.3.2</appengine-maven-plugin-version>
+        <jetty.maven.plugin>9.4.3.v20170317</jetty.maven.plugin>
     </properties>
 
     <profiles>
@@ -70,6 +82,7 @@
             <groupId>javax.servlet</groupId>  <!-- Java Servlet API -->
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
+            <scope>provided</scope>           <!-- Provided by the Jetty Servlet engine -->
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
