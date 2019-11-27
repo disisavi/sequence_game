@@ -41,3 +41,7 @@ public class LandingFilter implements Filter {
     public void destroy() {
     }
 }
+//
+//todo
+//1. Create mini mvc thingy
+//2. start with Player creattion, Player DashBoard and Player hearbeat.

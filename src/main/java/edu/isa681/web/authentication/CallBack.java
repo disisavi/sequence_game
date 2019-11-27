@@ -1,18 +1,14 @@
 package edu.isa681.web.authentication;
 
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.auth.oauth2.TokenResponse;
+
+import com.google.api.client.auth.openidconnect.IdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import edu.isa681.web.game.GameController;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -25,32 +21,29 @@ import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 
-@Path("oauth2callback")
+@Path("/oauth2callback")
 public class CallBack {
     private static final Collection<String> SCOPES = Arrays.asList("email", "profile");
-    private static final String USERINFO_ENDPOINT
-            = "https://www.googleapis.com/plus/v1/people/me/openIdConnect";
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private GoogleAuthorizationCodeFlow flow;
     private GameController gameController = GameController.getGameController();
     @Context
-    private HttpServletRequest req;
+    private HttpServletRequest request;
 
     @GET()
     public Response loginCallBack(@Context ServletContext context) throws IOException {
+
         // Ensure that this is no request forgery going on, and that the user
         // sending us this connect request is the user that was supposed to
-
-        if (req.getSession().getAttribute("state") == null
-                || !req.getParameter("state").equals((String) req.getSession().getAttribute("state"))) {
+        if (request.getSession().getAttribute("state") == null
+                || !request.getParameter("state").equals((String) request.getSession().getAttribute("state"))) {
             return Response.temporaryRedirect(UriBuilder.fromPath("/index.jsp").build()).status(HttpServletResponse.SC_UNAUTHORIZED).build();
         }
 
 
-        req.getSession().removeAttribute("state");     // Remove one-time use state.
+        request.getSession().removeAttribute("state");     // Remove one-time use state.
 
         flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT,
@@ -60,27 +53,15 @@ public class CallBack {
                 SCOPES).build();
 
         final GoogleTokenResponse tokenResponse =
-                flow.newTokenRequest(req.getParameter("code"))
+                flow.newTokenRequest(request.getParameter("code"))
                         .setRedirectUri(context.getInitParameter("game.callback"))
                         .execute();
 
-        req.getSession().setAttribute("token", tokenResponse.toString()); // Keep track of the token.
-        final Credential credential = flow.createAndStoreCredential(tokenResponse, null);
-        System.out.println(tokenResponse.parseIdToken().getPayload());
-        final HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory(credential);
+        request.getSession().setAttribute("token", tokenResponse.toString()); // Keep track of the token.
+        IdToken.Payload payload = tokenResponse.parseIdToken().getPayload();
+        gameController.signUporInNewPlayer(payload);
 
-        final GenericUrl url = new GenericUrl(USERINFO_ENDPOINT);      // Make an authenticated request.
-        final HttpRequest request = requestFactory.buildGetRequest(url);
-        request.getHeaders().setContentType("application/json");
+        return Response.temporaryRedirect(UriBuilder.fromPath("../views/PlayerDashboard.jsp").build()).build();
 
-        final String jsonIdentity = request.execute().parseAsString();
-        @SuppressWarnings("unchecked")
-        HashMap<String, String> userIdResult =
-                new ObjectMapper().readValue(jsonIdentity, HashMap.class);
-        // From this map, extract the relevant profile info and store it in the session.
-        req.getSession().setAttribute("userEmail", userIdResult.get("email"));
-        req.getSession().setAttribute("userId", userIdResult.get("sub"));
-        req.getSession().setAttribute("userImageUrl", userIdResult.get("picture"));
-        return Response.temporaryRedirect(UriBuilder.fromPath((String) req.getSession().getAttribute("loginDestination")).build()).build();
     }
 }

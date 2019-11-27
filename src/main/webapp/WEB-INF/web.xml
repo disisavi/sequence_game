@@ -12,14 +12,14 @@
         <param-name>game.clientSecret</param-name>
         <param-value>NZZe3tkG67G6imwF46fJUTql</param-value>
     </context-param>
+<!--    <context-param>-->
+<!--        <param-name>game.callback</param-name>-->
+<!--        <param-value>http://localhost:8080/seq/sq/oauth2callback</param-value>-->
+<!--    </context-param>-->
     <context-param>
         <param-name>game.callback</param-name>
-        <param-value>http://localhost:8080/seq/sq/oauth2callback</param-value>
+        <param-value>https://sequencegame.appspot.com/sq/oauth2callback</param-value>
     </context-param>
-    <!--    <context-param>-->
-    <!--        <param-name>game.callback</param-name>-->
-    <!--        <param-value>https://sequencegame.appspot.com/oauth2callback</param-value>-->
-    <!--    </context-param>-->
     <servlet>
         <servlet-name>jersey-serlvet</servlet-name>
         <servlet-class>

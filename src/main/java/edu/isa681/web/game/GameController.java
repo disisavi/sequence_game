@@ -1,27 +1,23 @@
 package edu.isa681.web.game;
 
+import com.google.api.client.auth.openidconnect.IdToken;
 import edu.isa681.DOA.entity.Player;
-import edu.isa681.game.Game;
+import edu.isa681.DOA.entity.type.PlayerSate;
+import edu.isa681.web.game.abstractClass.AbstractGameController;
 
-import java.util.HashSet;
-import java.util.Set;
 
-public class GameController {
+public class GameController extends AbstractGameController {
     private static GameController gameController;
-    private Set<Player> players;
-    private Set<Game> games;
 
     private GameController() {
-        players = new HashSet<>();
-        games = new HashSet<>();
-
+        super();
     }
 
     /**
      * @return a singleton GameController
      */
     public static GameController getGameController() {
-        if (gameController == null) {
+        if (GameController.gameController == null) {
             synchronized (GameController.class) {
                 if (gameController == null) {
                     gameController = new GameController();
@@ -31,28 +27,55 @@ public class GameController {
         return gameController;
     }
 
-
-    public Set<Player> getPlayers() {
-        return players;
+    private Boolean isPlayerSingedIn(String sub) {
+        return getPlayers().containsKey(sub);
     }
 
-    public void setPlayers(Set<Player> players) {
-        this.players = players;
+    private Player getPlayerBySub(String sub) {
+        return getPlayers().get(sub);
     }
 
-    public void setPlayer(Player player) {
-        this.players.add(player);
+
+    private Player createPlayer(IdToken.Payload loginPayload) {
+        String email = (String) loginPayload.get("email");
+        String name = (String) loginPayload.get("name");
+
+        Player player = new Player(name, email);
+//        TODO :
+//        Put it on database
+        return player;
     }
 
-    public Set<Game> getGames() {
-        return games;
+    public Player getRegisterdPlayer(String email) {
+        //TODO :
+        // Get player from persistence layer
+        return null;
     }
 
-    public void setGames(Set<Game> games) {
-        this.games = games;
+    private void putPlayerOnSession(IdToken.Payload loginPayload) {
+        String email = (String) loginPayload.get("email");
+        String sub = (String) loginPayload.get("sub");
+
+        Player player = getRegisterdPlayer(email);
+        if (player == null) {
+            player = createPlayer(loginPayload);
+        }
+        getPlayers().put(sub, player);
     }
 
-    public void setGame(Game game) {
-        this.games.add(game);
+    public String signUporInNewPlayer(IdToken.Payload loginPayload) {
+        String sub = (String) loginPayload.get("sub");
+        if (isPlayerSingedIn(sub)) {
+            Player player = getPlayerBySub(sub);
+            if (player == null) {
+                getPlayers().remove(sub);
+                putPlayerOnSession(loginPayload);
+            }
+            player.setPlayerSate(PlayerSate.Online);
+        } else {
+            Player player = createPlayer(loginPayload);
+            putPlayerOnSession(loginPayload);
+        }
+        return sub;
     }
 }
