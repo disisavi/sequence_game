@@ -1,4 +1,4 @@
-package edu.isa681.web.login;
+package edu.isa681.web.authentication;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.http.HttpTransport;

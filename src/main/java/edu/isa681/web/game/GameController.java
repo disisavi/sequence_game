@@ -20,7 +20,7 @@ public class GameController {
     /**
      * @return a singleton GameController
      */
-    static GameController getGameController() {
+    public static GameController getGameController() {
         if (gameController == null) {
             synchronized (GameController.class) {
                 if (gameController == null) {
