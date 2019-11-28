@@ -1,15 +1,13 @@
 package edu.isa681.game;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import edu.isa681.DOA.entity.Player;
 import edu.isa681.DOA.entity.PlayerGameSession;
 import edu.isa681.DOA.entity.type.PlayerSate;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,12 +34,12 @@ class GameTest {
         player1.setPlayerSate(PlayerSate.Offline);
         player2.setPlayerSate(PlayerSate.Offline);
         player3.setPlayerSate(PlayerSate.Offline);
-        assertThrows(IllegalStateException.class, () -> new Game(new Player[]{player1, player2, player3}));
+        assertThrows(IllegalStateException.class, () -> new Game(Arrays.asList(player1, player2, player3)));
     }
 
     @Test
     void distributeCards() {
-        game = new Game(new Player[]{player1, player2, player3});
+        game = new Game(Arrays.asList(player1, player2, player3));
         game.distributeCards();
         assertNotEquals(game.playersGameSessions.get(0).getChip(), game.playersGameSessions.get(1).getChip());
         game.playersGameSessions.forEach(playerGameSession -> assertEquals(playerGameSession.getCardsList().size(), 6));
@@ -53,7 +51,7 @@ class GameTest {
 
     @Test
     void game1() {
-        game = new Game(new Player[]{player1, player2, player3});
+        game = new Game(Arrays.asList(player1, player2, player3));
         game.distributeCards();
         assertThrows(IllegalArgumentException.class, () -> game.placeChip(game.playersGameSessions.get(2), new Point(2, 2), 2));
     }

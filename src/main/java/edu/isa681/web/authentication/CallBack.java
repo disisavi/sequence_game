@@ -9,6 +9,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import edu.isa681.web.game.GameController;
+import edu.isa681.web.server.Params;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -54,7 +55,7 @@ public class CallBack {
 
         final GoogleTokenResponse tokenResponse =
                 flow.newTokenRequest(request.getParameter("code"))
-                        .setRedirectUri(context.getInitParameter("game.callback"))
+                        .setRedirectUri(Params.getCallBack())
                         .execute();
 
         request.getSession().setAttribute("token", tokenResponse.toString()); // Keep track of the token.

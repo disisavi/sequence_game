@@ -3,16 +3,13 @@ package edu.isa681.game;
 import edu.isa681.DOA.entity.Player;
 import edu.isa681.game.items.Board;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
-@XmlRootElement
 public class GameState {
     private final static Integer Max_Moves = 104;
     Integer boardVersionNumber;
     Boolean isSequenceDone;
     List<Board.Cell> boardStateSnapShot;
-
     Player playerWon;
 
 

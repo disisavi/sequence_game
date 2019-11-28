@@ -5,6 +5,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import edu.isa681.web.server.Params;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,7 @@ public class login {
     private HttpServletRequest request;
 
     @GET()
+    @Path("/")
     public Response login(@Context ServletContext context) throws URISyntaxException {
         String state = new BigInteger(130, new SecureRandom()).toString(32);  // prevent request forgery
         request.getSession().setAttribute("state", state);
@@ -54,7 +56,7 @@ public class login {
         // Callback url should be the one registered in Google Developers Console
         String url =
                 flow.newAuthorizationUrl()
-                        .setRedirectUri(context.getInitParameter("game.callback"))
+                        .setRedirectUri(Params.getCallBack())
                         .setState(state)            // Prevent request forgery
                         .build();
         URI redirect = new URI(url);

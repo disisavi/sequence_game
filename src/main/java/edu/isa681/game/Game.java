@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import java.awt.*;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Game {
     final static Logger log = Logger.getLogger(Game.class);
@@ -23,9 +24,9 @@ public class Game {
     Integer turnIndex;
     GameState gameState;
 
-    public Game(Player[] players) {
+    public Game(List<Player> players) {
         log.info("New Game being created.");
-        if (players.length != 3) {
+        if (players.size() != 3) {
             throw new IllegalStateException("Invalid Number of players. Exactly 3 players allowed to play the game.");
         }
         playersGameSessions = new ArrayList<>();
@@ -43,7 +44,7 @@ public class Game {
         log.info("Game creation complete.");
     }
 
-    private void initPlayerSession(Player[] players) {
+    private void initPlayerSession(List<Player> players) {
         log.info("New Player session initiation started");
         for (Player player : players) {
             if (player.getPlayerSate() == PlayerSate.Online) {
@@ -68,14 +69,13 @@ public class Game {
         }
     }
 
-    private PlayerGameSession nextTurn() {
+    private void nextTurn() {
         if (turnIndex == this.playersGameSessions.size() - 1) {
             turnIndex = 0;
         } else {
             turnIndex++;
         }
         log.info("Next turn index is " + turnIndex);
-        return this.playersGameSessions.get(turnIndex);
     }
 
     public void placeChip(PlayerGameSession playerGameSession, Point point, Integer cardIndex) {

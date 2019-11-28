@@ -8,6 +8,8 @@ import edu.isa681.game.GameState;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 @Path("/game")
@@ -24,7 +26,7 @@ public class GameService {
         player1.setPlayerSate(PlayerSate.Online);
         player2.setPlayerSate(PlayerSate.Online);
         player3.setPlayerSate(PlayerSate.Online);
-        Game game = new Game(new Player[]{player1, player2, player3});
+        Game game = new Game(new ArrayList<>(Arrays.asList(player1, player2, player3)));
         return game.getGameState();
     }
 

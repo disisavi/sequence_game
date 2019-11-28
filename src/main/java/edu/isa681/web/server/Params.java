@@ -24,4 +24,14 @@ public class Params {
         return "http://localhost:8080/sq/game/";
     }
 
+    public static String getCallBack() {
+        if (isProd) {
+            return "https://sequencegame.appspot.com/sq/oauth2callback";
+        }
+        if (isIDE) {
+            return "http://localhost:8080/seq/sq/oauth2callback";
+        }
+        return "http://localhost:8080/sq/oauth2callback";
+    }
+
 }
