@@ -24,6 +24,16 @@ public class Params {
         return "http://localhost:8080/sq/game/";
     }
 
+    public static String getDashboardParam() {
+        if (isProd) {
+            return "https://sequencegame.appspot.com/sq/dashboard/";
+        }
+        if (isIDE) {
+            return "http://localhost:8080/seq/sq/dashboard/";
+        }
+        return "http://localhost:8080/sq/dashboard/";
+    }
+
     public static String getCallBack() {
         if (isProd) {
             return "https://sequencegame.appspot.com/sq/oauth2callback";

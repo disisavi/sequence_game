@@ -4,7 +4,8 @@ import com.google.api.client.auth.openidconnect.IdToken;
 import edu.isa681.DOA.entity.Player;
 import edu.isa681.DOA.entity.type.PlayerSate;
 import edu.isa681.game.Game;
-import edu.isa681.web.dashboard.PlayerInviteMessage;
+import edu.isa681.messages.PlayerInfoMessage;
+import edu.isa681.messages.PlayerInviteMessage;
 import edu.isa681.web.game.abstractClass.AbstractGameController;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class GameController extends AbstractGameController {
         return getPlayers().containsKey(sub);
     }
 
-    private Player getPlayerBySub(String sub) {
+    public Player getPlayerBySub(String sub) {
         return getPlayers().get(sub);
     }
 
@@ -89,6 +90,13 @@ public class GameController extends AbstractGameController {
         playerInviteMessage.getPlayerStubsInvited().forEach(elt -> playersToPlay.add(getPlayerBySub(elt)));
         Game newGame = new Game(playersToPlay);
         getGames().add(newGame);
+    }
+
+    public void playerOnlineRightNow(PlayerInfoMessage playerInfoMessage) {
+
+        List<Player> players = getPlayersNotOffline();
+        players.forEach(player -> playerInfoMessage.getPlayerSateMap().put(player.getName(), player.getPlayerSate()));
+
     }
 
 }

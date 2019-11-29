@@ -93,9 +93,9 @@
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
             <version>${jersey.maven.plugin}</version>
-<!--            <scope>provided</scope>-->
+            <!--            <scope>provided</scope>-->
         </dependency>
-<!--         https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common-->
+        <!--         https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common-->
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-common</artifactId>
@@ -106,7 +106,6 @@
             <artifactId>jersey-server</artifactId>
             <version>${jersey.maven.plugin}</version>
         </dependency>
-
         <dependency>
             <groupId>jakarta.ws.rs</groupId>
             <artifactId>jakarta.ws.rs-api</artifactId>
@@ -123,7 +122,12 @@
             <artifactId>jersey-hk2</artifactId>
             <version>${jersey.maven.plugin}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>${jersey.maven.plugin}</version>
+            <scope>runtime</scope>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
         <dependency>
             <groupId>javax.ws.rs</groupId>

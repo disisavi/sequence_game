@@ -1,4 +1,4 @@
-package edu.isa681.web.dashboard;
+package edu.isa681.messages;
 
 import java.util.List;
 

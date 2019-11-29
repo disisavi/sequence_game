@@ -60,9 +60,11 @@ public class CallBack {
 
         request.getSession().setAttribute("token", tokenResponse.toString()); // Keep track of the token.
         IdToken.Payload payload = tokenResponse.parseIdToken().getPayload();
-        gameController.signUporInNewPlayer(payload);
-
-        return Response.temporaryRedirect(UriBuilder.fromPath("../views/PlayerDashboard.jsp").build()).build();
+        String sub = gameController.signUporInNewPlayer(payload);
+        UriBuilder uriBuilder = UriBuilder.fromPath("../views/PlayerDashboard.jsp")
+                .queryParam("playerSub", sub)
+                .queryParam("playerName", gameController.getPlayerBySub(sub).getName());
+        return Response.temporaryRedirect(uriBuilder.build()).build();
 
     }
 }

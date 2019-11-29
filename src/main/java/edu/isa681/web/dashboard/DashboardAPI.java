@@ -2,14 +2,14 @@ package edu.isa681.web.dashboard;
 
 
 import edu.isa681.DOA.entity.type.PlayerSate;
+import edu.isa681.messages.PlayerInfoMessage;
+import edu.isa681.messages.PlayerInviteMessage;
 import edu.isa681.web.game.GameController;
 import org.apache.log4j.Logger;
 
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
@@ -39,6 +39,34 @@ public class DashboardAPI {
             responseBuilder.status(HttpServletResponse.SC_EXPECTATION_FAILED).entity(ex.getMessage());
         }
         return responseBuilder.build();
+    }
+
+    @GET
+    @Path("/getPlayers")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public PlayerInfoMessage getPlayersList(PlayerInviteMessage playerInviteMessage) {
+        PlayerInfoMessage playerInfoMessage = new PlayerInfoMessage();
+        playerInfoMessage.setGotMessage(false);
+        try {
+            if (playerInviteMessage.getPlayerSelfStub() == null) {
+                throw new IllegalStateException("Player info Not included with the request");
+            }
+            if (!(gameController.getPlayers().containsKey(playerInviteMessage.getPlayerSelfStub()))) {
+                throw new IllegalStateException("Incorrect player info provided");
+            }
+            gameController.playerOnlineRightNow(playerInfoMessage);
+            playerInfoMessage.getPlayerSateMap().remove(gameController.getPlayerBySub(playerInviteMessage.getPlayerSelfStub()).getName());
+            playerInfoMessage.setGotMessage(true);
+        } catch (IllegalStateException ex) {
+            logger.info("Exception occurred while getting player info ", ex);
+            playerInfoMessage.setErrorMessage(ex.getMessage());
+        } catch (Exception ex) {
+            logger.info("Unintended Exception occurred, please check the log", ex);
+            playerInfoMessage.setErrorMessage("Something fishy is going on here, PLease ask the developer to check the error " + ex.getMessage());
+        }
+
+        return playerInfoMessage;
     }
 
 }

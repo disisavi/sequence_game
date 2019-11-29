@@ -15,8 +15,6 @@
             type="javascript"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             type="javascript"></script>
-    <!-- Custom styles for this template -->
-
 </head>
 <body>
 <!--[if IE]>
@@ -25,8 +23,24 @@
 <![endif]-->
 
 <div class="container">
-    player came till here
-    <div class="container">
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome <span id="namePLaceHolder"></span></h1>
+        <p class="lead">We are ready to shuffle the cards.. </p>
+        <hr class="my-4">
     </div>
+    <div>
+        <h3> Please select from the player below to invite for the next game</h3>
+        <form id = "form">
+        </form>
+    </div>
+</div>
+<script>
+    <% String param = Params.getDashboardParam();%>
+    const param = "<%=param%>";
+    const playerName = '<%=request.getParameter("playerName")%>';
+    const playerSub = '<%=request.getParameter("playerStub")%>';
+</script>
+<script src="../script/PlayerInfoMessage.js" type="text/javascript"></script>
+<script src="../script/dashboardScript.js" type="text/javascript"></script>
 </body>
 </html>
