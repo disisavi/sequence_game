@@ -11,12 +11,14 @@ public class GameState {
     Boolean isSequenceDone;
     List<Board.Cell> boardStateSnapShot;
     Player playerWon;
+    String currentPlayer;
 
 
     public GameState(Game game) {
         boardVersionNumber = 0;
         isSequenceDone = false;
         boardStateSnapShot = game.board.generateBoardSnapshot();
+        setCurrentPlayer(game);
     }
 
 
@@ -60,5 +62,17 @@ public class GameState {
 
     public void setBoardStateSnapShot(List<Board.Cell> boardStateSnapShot) {
         this.boardStateSnapShot = boardStateSnapShot;
+    }
+
+    public String getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(String currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public void setCurrentPlayer(Game game) {
+        currentPlayer = game.playersGameSessions.get(game.turnIndex).getPlayer().getName();
     }
 }

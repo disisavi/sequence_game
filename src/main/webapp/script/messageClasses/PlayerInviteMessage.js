@@ -1,6 +1,6 @@
 class PlayerInviteMessage {
     constructor(sub) {
-        this.playerStubsInvited = [];
+        this.playerStubsInvited = [sub];
         this.playerSelfStub = sub;
     }
 
