@@ -69,14 +69,27 @@ public class GameController extends AbstractGameController {
         getPlayers().put(sub, player);
     }
 
+    /**
+     * @param loginPayload:
+     * @return playerSub
+     * <p>
+     * the order of events is
+     * Check if player is in session
+     * if yes
+     * get the player, set the player as online and return the sub
+     * if no
+     * check if the player exists in the DB
+     * if yes
+     * get the player from DB, and then add player to the game session and returen the sub
+     * if no
+     * create the player and put it in session
+     */
     public String signUporInNewPlayer(IdToken.Payload loginPayload) {
         String sub = (String) loginPayload.get("sub");
         if (isPlayerSingedIn(sub)) {
             Player player = getPlayerBySub(sub);
-            if (player == null) {
-                getPlayers().remove(sub);
-                putPlayerOnSession(loginPayload);
-            }
+            getPlayers().remove(sub);
+            putPlayerOnSession(loginPayload);
             player.setPlayerSate(PlayerSate.Online);
         } else {
             Player player = createPlayer(loginPayload);

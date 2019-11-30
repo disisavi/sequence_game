@@ -30,7 +30,7 @@
     </div>
     <div>
         <h3> Please select from the player below to invite for the next game</h3>
-        <form id = "form">
+        <form id="form">
         </form>
     </div>
 </div>
@@ -38,9 +38,10 @@
     <% String param = Params.getDashboardParam();%>
     const param = "<%=param%>";
     const playerName = '<%=request.getParameter("playerName")%>';
-    const playerSub = '<%=request.getParameter("playerStub")%>';
+    const playerSub = '<%=request.getParameter("playerSub")%>';
 </script>
-<script src="../script/PlayerInfoMessage.js" type="text/javascript"></script>
+<script src="../script/messageClasses/PlayerInviteMessage.js" type="text/javascript"></script>
+<script src="../script/messageClasses/PlayerInfoMessage.js" type="text/javascript"></script>
 <script src="../script/dashboardScript.js" type="text/javascript"></script>
 </body>
 </html>

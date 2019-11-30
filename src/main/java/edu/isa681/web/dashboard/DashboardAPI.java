@@ -16,7 +16,7 @@ import java.net.URI;
 
 @Path("/dashboard")
 public class DashboardAPI {
-    Logger logger = Logger.getLogger(DashboardAPI.class);
+    private Logger logger = Logger.getLogger(DashboardAPI.class);
     private GameController gameController = GameController.getGameController();
 
     @POST
@@ -41,7 +41,7 @@ public class DashboardAPI {
         return responseBuilder.build();
     }
 
-    @GET
+    @POST
     @Path("/getPlayers")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -59,9 +59,11 @@ public class DashboardAPI {
             playerInfoMessage.getPlayerSateMap().remove(gameController.getPlayerBySub(playerInviteMessage.getPlayerSelfStub()).getName());
             playerInfoMessage.setGotMessage(true);
         } catch (IllegalStateException ex) {
+            ex.printStackTrace();
             logger.info("Exception occurred while getting player info ", ex);
             playerInfoMessage.setErrorMessage(ex.getMessage());
         } catch (Exception ex) {
+            ex.printStackTrace();
             logger.info("Unintended Exception occurred, please check the log", ex);
             playerInfoMessage.setErrorMessage("Something fishy is going on here, PLease ask the developer to check the error " + ex.getMessage());
         }

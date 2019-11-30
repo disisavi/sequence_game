@@ -93,7 +93,7 @@
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
             <version>${jersey.maven.plugin}</version>
-            <!--            <scope>provided</scope>-->
+<!--            <scope>provided</scope>-->
         </dependency>
         <!--         https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common-->
         <dependency>

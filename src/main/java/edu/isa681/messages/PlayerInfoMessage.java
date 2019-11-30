@@ -2,6 +2,7 @@ package edu.isa681.messages;
 
 import edu.isa681.DOA.entity.type.PlayerSate;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerInfoMessage {
@@ -9,6 +10,9 @@ public class PlayerInfoMessage {
     private String errorMessage;
     private Map<String, PlayerSate> playerSateMap;
 
+    public PlayerInfoMessage() {
+        playerSateMap = new HashMap<>();
+    }
 
     public Boolean getGotMessage() {
         return gotMessage;
