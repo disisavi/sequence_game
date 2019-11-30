@@ -24,6 +24,11 @@
     </div>
 </div>
 </div>
+<div class="player-container">
+    <div class="seq-player" id="playerGrid">
+        <p>Your turn</p>
+    </div>
+</div>
 <script language="javascript">
     <% String param=Params.getBoardParam();%>
     var param = "<%=param%>";
