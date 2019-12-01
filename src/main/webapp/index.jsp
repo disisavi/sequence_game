@@ -4,43 +4,6 @@
 <head>
 <style>
 
-.bg-image {
-  /* The image used */
-  background-image: url("Sequence.jpg");
-
-  /* Add the blur effect */
-  filter: blur(8px);
-  -webkit-filter: blur(8px);
-
-  /* Full height */
-  height: 100%;
-
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-
-/* Position text in the middle of the page/image */
-.bg-text {
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
-  color: white;
-  font-weight: bold;
-  border: 3px solid #f1f1f1;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  width: 80%;
-  padding: 20px;
-  text-align: center;
-}
-
-
-.button {background-color: #008CBA;}
 </style>
     <meta charset="utf-8">
     <title>Sequence</title>
@@ -71,7 +34,7 @@
     your browser</a> to improve your experience and security.</p>
 <![endif]-->
 <div class="bg-image"></div>
-<div class="bg-text">
+<div class="container bg-text">
         <center><h1 class="display-4">Hey!!! </h1></center>
 		<center><h1 class="display-4"> Sequence is finally online!</h1></center>
         <center> <p class="lead">Welcome to the fun family, abstract strategy board-and-card game. So what are you waiting for,
@@ -79,7 +42,7 @@
         <hr class="my-4">
         <center> <p>For the purpose of keeping user information and credentials as safe as posible, we use google provided single
             sign on service. Please use your google account to sign on.</p> </center>
-    
+
     <form id='loginform' name="loginform" method="get"
           action='<%=param%>'>
         <center> <button type="submit" class="btn btn-primary btn-lg">Sign In!</button> </center>

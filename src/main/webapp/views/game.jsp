@@ -16,7 +16,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             type="javascript"></script>
     <!-- Custom styles for this template -->
-    <link href="style/gamestyle.css" rel="stylesheet">
+    <link href="../style/gamestyle.css" rel="stylesheet">
 </head>
 <body>
 <div class="cover-container">
@@ -33,6 +33,6 @@
     <% String param=Params.getBoardParam();%>
     var param = "<%=param%>";
 </script>
-<script src="script/gamescript.js"></script>
+<script src="../script/gamescript.js"></script>
 </body>
 </html>
