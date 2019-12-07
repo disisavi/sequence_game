@@ -4,10 +4,7 @@ import edu.isa681.DOA.entity.Player;
 import edu.isa681.DOA.entity.type.PlayerSate;
 import edu.isa681.game.Game;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AbstractGameController {
@@ -39,11 +36,12 @@ public class AbstractGameController {
     public List<Player> getPlayersNotOffline() {
         List<Player> players = new ArrayList<>();
 
-        getPlayers().forEach((k, v) -> {
+        for (Map.Entry<String, Player> entry : getPlayers().entrySet()) {
+            Player v = entry.getValue();
             if (!(v.getPlayerSate().equals(PlayerSate.Offline))) {
                 players.add(v);
             }
-        });
+        }
         return players;
     }
 }

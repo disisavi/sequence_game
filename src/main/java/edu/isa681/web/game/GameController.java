@@ -68,6 +68,7 @@ public class GameController extends AbstractGameController {
             player = createPlayer(loginPayload);
         }
         getPlayers().put(sub, player);
+        player.setPlayerSate(PlayerSate.Online);
     }
 
     /**
@@ -91,7 +92,6 @@ public class GameController extends AbstractGameController {
             Player player = getPlayerBySub(sub);
             getPlayers().remove(sub);
             putPlayerOnSession(loginPayload);
-            player.setPlayerSate(PlayerSate.Online);
         } else {
             Player player = createPlayer(loginPayload);
             putPlayerOnSession(loginPayload);
