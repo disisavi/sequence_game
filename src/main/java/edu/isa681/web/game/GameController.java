@@ -108,7 +108,7 @@ public class GameController extends AbstractGameController {
 
     public void playerOnlineRightNow(PlayerInfoMessage playerInfoMessage) {
 
-        List<Player> players = getPlayersNotOffline();
+        List<Player> players = getPlayersOnline();
         players.forEach(player -> playerInfoMessage.getPlayerSateMap().put(player.getName(), player.getPlayerSate()));
 
     }

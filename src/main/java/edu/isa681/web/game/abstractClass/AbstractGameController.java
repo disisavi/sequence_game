@@ -33,12 +33,12 @@ public class AbstractGameController {
         this.games = games;
     }
 
-    public List<Player> getPlayersNotOffline() {
+    public List<Player> getPlayersOnline() {
         List<Player> players = new ArrayList<>();
 
         for (Map.Entry<String, Player> entry : getPlayers().entrySet()) {
             Player v = entry.getValue();
-            if (!(v.getPlayerSate().equals(PlayerSate.Offline))) {
+            if ((v.getPlayerSate().equals(PlayerSate.Online))) {
                 players.add(v);
             }
         }
