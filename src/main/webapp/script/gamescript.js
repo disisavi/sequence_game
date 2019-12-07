@@ -28,21 +28,6 @@ function printBoard(outputJsonString) {
     }
 }
 
-/*function printPlayer(){
-    if boardstatesnapshot has changed AND last coin placed is red
-    {
-        document.getElementById("playerGrid.innerHTML") += "<div class = 'row player-row' id = 'player1" + 0 + "'>";
-    }
-    else if boardstatesnapshot has changed AND last coin placed is green
-    {
-        document.getElementById("playerGrid.innerHTML") += "<div class = 'row player-row' id = 'player2" + 0 + "'>";
-    }
-    else
-    {
-        document.getElementById("playerGrid.innerHTML") += "<div class = 'row player-row' id = 'player3" + 0 + "'>";
-    }
-    
-}*/
 
 window.onload = function () {
     loadData();
