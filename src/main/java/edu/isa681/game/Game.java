@@ -20,7 +20,7 @@ public class Game {
     final static Logger log = Logger.getLogger(Game.class);
     private Deck deck;
     Board board;
-    ArrayList<PlayerGameSession> playersGameSessions;
+    public ArrayList<PlayerGameSession> playersGameSessions;
     Integer turnIndex;
     GameState gameState;
 

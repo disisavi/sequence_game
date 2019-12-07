@@ -2,8 +2,8 @@ package edu.isa681.web.dashboard;
 
 
 import edu.isa681.DOA.entity.type.PlayerSate;
-import edu.isa681.messages.PlayerInfoMessage;
-import edu.isa681.messages.PlayerInviteMessage;
+import edu.isa681.web.messages.PlayerInfoMessage;
+import edu.isa681.web.messages.PlayerInviteMessage;
 import edu.isa681.web.game.GameController;
 import org.apache.log4j.Logger;
 

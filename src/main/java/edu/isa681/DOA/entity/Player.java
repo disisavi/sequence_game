@@ -32,7 +32,7 @@ public class Player {
     }
 
     public PlayerGameSession getNewPlayerSession() {
-        this.playerSate = PlayerSate.Playing;
+        this.playerSate = PlayerSate.Invited;
         return new PlayerGameSession(this);
     }
 
@@ -68,7 +68,10 @@ public class Player {
         this.playerSate = playerSate;
     }
 
-
+    @Override
+    public boolean equals(Object obj) {
+        return ((Player) obj).emailID.equalsIgnoreCase(this.emailID);
+    }
 }
 
 

@@ -2,10 +2,11 @@ package edu.isa681.web.game;
 
 import com.google.api.client.auth.openidconnect.IdToken;
 import edu.isa681.DOA.entity.Player;
+import edu.isa681.DOA.entity.PlayerGameSession;
 import edu.isa681.DOA.entity.type.PlayerSate;
 import edu.isa681.game.Game;
-import edu.isa681.messages.PlayerInfoMessage;
-import edu.isa681.messages.PlayerInviteMessage;
+import edu.isa681.web.messages.PlayerInfoMessage;
+import edu.isa681.web.messages.PlayerInviteMessage;
 import edu.isa681.web.game.abstractClass.AbstractGameController;
 
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class GameController extends AbstractGameController {
         return player;
     }
 
-    public Player getRegisterdPlayer(String email) {
+    private Player getRegisterdPlayer(String email) {
         //TODO :
         // Get player from persistence layer
         return null;
@@ -112,4 +113,34 @@ public class GameController extends AbstractGameController {
 
     }
 
+    public Boolean isPlayerAttachedToGame(String PlayerSub) {
+        boolean isPlayerAttachedToGame = false;
+        if (gameController.getPlayerBySub(PlayerSub) != null) {
+            for (Game game : gameController.getGames()) {
+                for (PlayerGameSession playerGameSession : game.playersGameSessions) {
+                    if (playerGameSession.player.equals(gameController.getPlayerBySub(PlayerSub))) {
+                        isPlayerAttachedToGame = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return isPlayerAttachedToGame;
+    }
+
+    public Game getGameForPlayer(String playerSub) {
+        Game gameForPlayer = null;
+        gameController = GameController.getGameController();
+        if (gameController.getPlayerBySub(playerSub) != null) {
+            for (Game game : gameController.getGames()) {
+                for (PlayerGameSession playerGameSession : game.playersGameSessions) {
+                    if (playerGameSession.player.equals(gameController.getPlayerBySub(playerSub))) {
+                        gameForPlayer = game;
+                        break;
+                    }
+                }
+            }
+        }
+        return gameForPlayer;
+    }
 }

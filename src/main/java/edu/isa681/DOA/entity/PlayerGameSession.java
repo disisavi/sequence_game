@@ -1,5 +1,6 @@
 package edu.isa681.DOA.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.isa681.game.Game;
 import edu.isa681.game.items.Card;
 import edu.isa681.game.types.Chips;
@@ -12,7 +13,9 @@ public class PlayerGameSession {
     List<Card> cardsList;
     Chips chip;
     Integer numberChipsAvailable;
-    Player player;
+    @JsonIgnore
+    public Player player;
+    @JsonIgnore
     Game game;
 
     void placeChip(Point point, Integer cardIndex) {
