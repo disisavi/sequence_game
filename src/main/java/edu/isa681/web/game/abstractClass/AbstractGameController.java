@@ -16,9 +16,12 @@ public class AbstractGameController {
         games = new HashSet<>();
     }
 
-
-    public ConcurrentHashMap<String, Player> getPlayers() {
+    protected ConcurrentHashMap<String, Player> getPlayers() {
         return players;
+    }
+
+    public Player getPlayerWithSub(String playerSub) {
+        return getPlayers().get(playerSub);
     }
 
     public void setPlayers(ConcurrentHashMap<String, Player> players) {

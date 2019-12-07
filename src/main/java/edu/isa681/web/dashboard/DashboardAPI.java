@@ -29,8 +29,8 @@ public class DashboardAPI {
         try {
 
             for (String playerStub : playerInviteMessage.getPlayerStubsInvited()) {
-                if (gameController.getPlayers().get(playerStub) == null
-                        || !(gameController.getPlayers().get(playerStub).getPlayerSate().equals(PlayerSate.Online))) {
+                if (gameController.getPlayerBySub(playerStub) == null
+                        || !(gameController.getPlayerBySub(playerStub).getPlayerSate().equals(PlayerSate.Online))) {
                     throw new IllegalStateException("Players selected doesnt seems to be available to play");
                 }
             }
@@ -54,7 +54,7 @@ public class DashboardAPI {
             if (playerInviteMessage.getPlayerSelfStub() == null) {
                 throw new IllegalStateException("Player info Not included with the request");
             }
-            if (!(gameController.getPlayers().containsKey(playerInviteMessage.getPlayerSelfStub()))) {
+            if (gameController.getPlayerBySub(playerInviteMessage.getPlayerSelfStub()) == null) {
                 throw new IllegalStateException("Incorrect player info provided");
             }
             gameController.playerOnlineRightNow(playerInfoMessage);

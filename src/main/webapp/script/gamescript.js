@@ -6,7 +6,7 @@ function loadData() {
             printBoard(xhr.responseText);
         }
     };
-    xhr.open('GET', url);
+    xhr.open('POST', url);
     xhr.send();
 }
 
