@@ -1,14 +1,18 @@
+let isFormNotChecked = true;
+
 window.onload = function (ev) {
+    var interval;
     if (playerName == null || playerSub == null) {
         displayError("Player could not be found. You are in wrong page. Will redirect you to login screen in 5 seconds")
     } else {
-        document.getElementById("namePLaceHolder").innerHTML = playerName;
+        document.getElementById("namePlaceHolder").innerHTML = playerName;
     }
-    getPlayersOnline();
+    interval = setInterval(getPlayersOnline, 5000);
 };
 
 
 function getPlayersOnline() {
+    if(isFormNotChecked){
     const url = param + 'getPlayers';
     let xhr = new XMLHttpRequest();
 
@@ -16,9 +20,9 @@ function getPlayersOnline() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             try {
-                if (ajaxRequest.status == 200) {
+                if (xhr.status == 200) {
                     let playerMap = generatePlayerMap(xhr.responseText);
-                    // drawForm(playerMap)
+                    drawForm(playerMap);
                 } else {
                     throw "something went wrong";
                 }
@@ -32,6 +36,7 @@ function getPlayersOnline() {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify(playerInviteMessage));
 }
+}
 
 function generatePlayerMap(response) {
     let responseJson = JSON.parse(response)
@@ -44,18 +49,23 @@ function generatePlayerMap(response) {
     throw playerInfo.errorMessage;
 }
 
-//
-// function drawForm(playerMap) {
-//
-//
-// <div class="form-check">
-//         <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1"
-//     checked>
-//     <label class="form-check-label" for="exampleRadios1">
-//         Default radio
-//     </label>
-//     </div>
-// }
+
+function drawForm(playerSateResponse) {
+var entry;
+var name;
+var value;
+ entry = playerSateResponse;
+ let index = 0;
+ document.getElementById('myForm').innerHTML = "";
+ for(name in entry){
+     value = display(name,index);
+     index++;
+ }
+     
+ }
+ function display(msg,index) {
+    document.getElementById('myForm').innerHTML += "<div><input type='checkbox' id= '"+index+"' value = '"+msg+"' />"+msg+"</div>";  
+  }
 
 function displayError(error) {
 
