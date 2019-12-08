@@ -58,7 +58,7 @@ public class DashboardAPI {
                 throw new IllegalStateException("Incorrect player info provided");
             }
             gameController.playerOnlineRightNow(playerInfoMessage);
-            playerInfoMessage.getPlayerSateMap().remove(gameController.getPlayerBySub(playerInviteMessage.getPlayerSelfStub()).getName());
+            playerInfoMessage.getPlayerSateMap().remove(playerInviteMessage.getPlayerSelfStub());
             playerInfoMessage.setGotMessage(true);
         } catch (IllegalStateException ex) {
             ex.printStackTrace();

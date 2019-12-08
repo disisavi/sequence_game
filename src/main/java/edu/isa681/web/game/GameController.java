@@ -46,8 +46,10 @@ public class GameController extends AbstractGameController {
     private Player createPlayer(IdToken.Payload loginPayload) {
         String email = (String) loginPayload.get("email");
         String name = (String) loginPayload.get("name");
+        String sub = (String) loginPayload.get("sub");
 
         Player player = new Player(name, email);
+        player.setPlayerSub(sub);
 //        TODO :
 //        Put it on database
         return player;
@@ -93,7 +95,6 @@ public class GameController extends AbstractGameController {
             getPlayers().remove(sub);
             putPlayerOnSession(loginPayload);
         } else {
-            Player player = createPlayer(loginPayload);
             putPlayerOnSession(loginPayload);
         }
         return sub;
@@ -109,7 +110,7 @@ public class GameController extends AbstractGameController {
     public void playerOnlineRightNow(PlayerInfoMessage playerInfoMessage) {
 
         List<Player> players = getPlayersOnline();
-        players.forEach(player -> playerInfoMessage.getPlayerSateMap().put(player.getName(), player.getPlayerSate()));
+        players.forEach(player -> playerInfoMessage.getPlayerSateMap().put(player.getPlayerSub(), player.getName()));
 
     }
 

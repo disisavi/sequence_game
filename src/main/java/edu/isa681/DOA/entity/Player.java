@@ -10,6 +10,7 @@ public class Player {
     String emailID;
     Integer playerID;
     PlayerSate playerSate;
+    String playerSub;
 
     public Player(String name, String emailID) {
         if (validateEmailID(emailID)) {
@@ -66,6 +67,14 @@ public class Player {
 
     public void setPlayerSate(PlayerSate playerSate) {
         this.playerSate = playerSate;
+    }
+
+    public String getPlayerSub() {
+        return playerSub;
+    }
+
+    public void setPlayerSub(String playerSub) {
+        this.playerSub = playerSub;
     }
 
     @Override
