@@ -22,23 +22,31 @@ public class GameService {
 
     @POST
     @Path("/getBoard")
-    @Produces(MediaType.TEXT_PLAIN)
-    public GameState initBoardData(String playerSub) {
-        Player player1 = new Player("Avi", "a@gmail.com");
-        Player player2 = new Player("sravya", "a@gmail.com");
-        Player player3 = new Player("sinchu", "a@gmail.com");
-        player1.setPlayerSate(PlayerSate.Online);
-        player2.setPlayerSate(PlayerSate.Online);
-        player3.setPlayerSate(PlayerSate.Online);
-        Game game = new Game(new ArrayList<>(Arrays.asList(player1, player2, player3)));
-        return game.getGameState();
+    @Produces(MediaType.APPLICATION_JSON)
+    public GameState boardData(String playerSub) {
+        GameState gameState = null;
+        gameController = GameController.getGameController();
+        if (gameController.getPlayerBySub(playerSub) == null) {
+            IllegalStateException ex = new IllegalStateException("No such player found");
+            ex.printStackTrace();
+            throw ex;
+        } else {
+            Game game = gameController.getGameForPlayer(playerSub);
+            if (game == null) {
+                IllegalStateException ex = new IllegalStateException("No Game attached with the player found");
+                ex.printStackTrace();
+                throw ex;
+            }
+            gameState = game.getGameState();
+        }
+        return gameState;
     }
 
 
     @POST
     @Path("/registerPlayer")
     @Consumes(MediaType.TEXT_PLAIN)
-    public void createGame(String playerSub) {
+    public void registerPlayerToGame(String playerSub) {
         gameController = GameController.getGameController();
         if (gameController.getPlayerBySub(playerSub) != null) {
             Player player = gameController.getPlayerBySub(playerSub);

@@ -24,9 +24,9 @@ class GameTest {
         player2 = new Player("sravya", "a@gmail.com");
         player3 = new Player("sinchu", "a@gmail.com");
         player4 = new Player("Prasad", "a@gmail.com");
-        player1.setPlayerSate(PlayerSate.Online);
-        player2.setPlayerSate(PlayerSate.Online);
-        player3.setPlayerSate(PlayerSate.Online);
+        player1.setPlayerSate(PlayerSate.Invited);
+        player2.setPlayerSate(PlayerSate.Invited);
+        player3.setPlayerSate(PlayerSate.Invited);
     }
 
     @Test

@@ -30,8 +30,10 @@
     </div>
 </div>
 <script language="javascript">
-    <% String param=Params.getBoardParam();%>
-    var param = "<%=param%>";
+    <% String param = Params.getBoardParam();%>
+    const param = "<%=param%>";
+    const playerName = '<%=request.getParameter("playerName")%>';
+    const playerSub = '<%=request.getParameter("playerSub")%>';
 </script>
 <script src="../script/gamescript.js"></script>
 </body>

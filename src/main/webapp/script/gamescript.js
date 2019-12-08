@@ -7,10 +7,13 @@ function loadData() {
         }
     };
     xhr.open('POST', url);
-    xhr.send();
+    xhr.send(playerSub);
+
+    setTimeout(loadData, 1000);
 }
 
 function printBoard(outputJsonString) {
+    document.getElementById("parentGrid").innerHTML = "";
     let cell = JSON.parse(outputJsonString);
 
     document.getElementById("parentGrid").innerHTML += "<div class = 'row seq-row' id = 'row" + 0 + "'>";

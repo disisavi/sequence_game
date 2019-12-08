@@ -47,7 +47,7 @@ public class Game {
     private void initPlayerSession(List<Player> players) {
         log.info("New Player session initiation started");
         for (Player player : players) {
-            if (player.getPlayerSate() == PlayerSate.Online) {
+            if (player.getPlayerSate() == PlayerSate.Invited) {
                 this.playersGameSessions.add(player.getNewPlayerSession());
                 log.info("Session for Player " + player.getName() + "Initiated");
             } else {
