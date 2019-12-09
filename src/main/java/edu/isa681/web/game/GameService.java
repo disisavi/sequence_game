@@ -5,13 +5,18 @@ import edu.isa681.DOA.entity.PlayerGameSession;
 import edu.isa681.DOA.entity.type.PlayerSate;
 import edu.isa681.game.Game;
 import edu.isa681.game.GameState;
+import edu.isa681.web.messages.PlayerMove;
+import org.apache.http.HttpMessage;
 
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -73,7 +78,7 @@ public class GameService {
         if (gameForPlayer == null) {
             throw new IllegalStateException("No Such player attached to the game found");
         } else {
-            for (PlayerGameSession playerGameSession : gameForPlayer.playersGameSessions) {
+            for (PlayerGameSession playerGameSession : gameForPlayer.getPlayersGameSessions()) {
                 if (playerGameSession.player.getPlayerSate() != PlayerSate.Playing) {
                     returnValue = false;
                     break;
@@ -96,9 +101,9 @@ public class GameService {
         } else {
             Game game = gameController.getGameForPlayer(playerSub);
             if (game == null) {
-                throw new IllegalStateException("No game foud for the player");
+                throw new IllegalStateException("No game found for the player");
             } else {
-                for (PlayerGameSession playerGameSession : game.playersGameSessions) {
+                for (PlayerGameSession playerGameSession : game.getPlayersGameSessions()) {
                     if (playerGameSession.player.equals(player)) {
                         returnPlayerGameSession = playerGameSession;
                         break;
@@ -108,6 +113,22 @@ public class GameService {
         }
 
         return returnPlayerGameSession;
+    }
+
+    @POST
+    @Path("/move")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response moveChip(PlayerMove playerMove) {
+        if (playerMove.getPlayerSub() == null) {
+            IllegalStateException illegalStateException = new IllegalStateException("Player Information Not provided");
+            illegalStateException.printStackTrace();
+            throw illegalStateException;
+        }
+
+        gameController = GameController.getGameController();
+        gameController.moveChip(playerMove);
+
+        return Response.status(HttpServletResponse.SC_OK).build();
     }
 }
 

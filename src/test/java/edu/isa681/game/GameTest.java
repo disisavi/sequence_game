@@ -40,7 +40,6 @@ class GameTest {
     @Test
     void distributeCards() {
         game = new Game(Arrays.asList(player1, player2, player3));
-        game.distributeCards();
         assertNotEquals(game.playersGameSessions.get(0).getChip(), game.playersGameSessions.get(1).getChip());
         game.playersGameSessions.forEach(playerGameSession -> assertEquals(playerGameSession.getCardsList().size(), 6));
         for (PlayerGameSession playerGameSession : game.playersGameSessions) {

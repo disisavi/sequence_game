@@ -12,6 +12,7 @@ public class GameState {
     List<Board.Cell> boardStateSnapShot;
     Player playerWon;
     String currentPlayer;
+    String currentPlayerSub;
 
 
     public GameState(Game game) {
@@ -74,5 +75,18 @@ public class GameState {
 
     public void setCurrentPlayer(Game game) {
         currentPlayer = game.playersGameSessions.get(game.turnIndex).getPlayer().getName();
+        setCurrentPlayerSub(game);
+    }
+
+    public String getCurrentPlayerSub() {
+        return currentPlayerSub;
+    }
+
+    public void setCurrentPlayerSub(String currentPlayerSub) {
+        this.currentPlayerSub = currentPlayerSub;
+    }
+
+    private void setCurrentPlayerSub(Game game) {
+        currentPlayerSub = game.playersGameSessions.get(game.turnIndex).getPlayer().getPlayerSub();
     }
 }

@@ -20,7 +20,7 @@ public class Game {
     final static Logger log = Logger.getLogger(Game.class);
     private Deck deck;
     Board board;
-    public ArrayList<PlayerGameSession> playersGameSessions;
+    ArrayList<PlayerGameSession> playersGameSessions;
     Integer turnIndex;
     GameState gameState;
 
@@ -36,10 +36,12 @@ public class Game {
             PlayerGameSession player = playersGameSessions.get(i);
             player.setGame(this);
             player.setChip(chips[i]);
+
         }
         turnIndex = 0;
         this.board = new Board();
         this.deck = new Deck();
+        this.distributeCards();
         this.gameState = new GameState(this);
         log.info("Game creation complete.");
     }
@@ -140,4 +142,39 @@ public class Game {
         return gameState;
     }
 
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public void setDeck(Deck deck) {
+        this.deck = deck;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public ArrayList<PlayerGameSession> getPlayersGameSessions() {
+        return playersGameSessions;
+    }
+
+    public void setPlayersGameSessions(ArrayList<PlayerGameSession> playersGameSessions) {
+        this.playersGameSessions = playersGameSessions;
+    }
+
+    public Integer getTurnIndex() {
+        return turnIndex;
+    }
+
+    public void setTurnIndex(Integer turnIndex) {
+        this.turnIndex = turnIndex;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
 }

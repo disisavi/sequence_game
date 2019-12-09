@@ -8,7 +8,9 @@ import edu.isa681.game.Game;
 import edu.isa681.web.messages.PlayerInfoMessage;
 import edu.isa681.web.messages.PlayerInviteMessage;
 import edu.isa681.web.game.abstractClass.AbstractGameController;
+import edu.isa681.web.messages.PlayerMove;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,7 +120,7 @@ public class GameController extends AbstractGameController {
         boolean isPlayerAttachedToGame = false;
         if (gameController.getPlayerBySub(PlayerSub) != null) {
             for (Game game : gameController.getGames()) {
-                for (PlayerGameSession playerGameSession : game.playersGameSessions) {
+                for (PlayerGameSession playerGameSession : game.getPlayersGameSessions()) {
                     if (playerGameSession.player.equals(gameController.getPlayerBySub(PlayerSub))) {
                         isPlayerAttachedToGame = true;
                         break;
@@ -134,7 +136,7 @@ public class GameController extends AbstractGameController {
         gameController = GameController.getGameController();
         if (gameController.getPlayerBySub(playerSub) != null) {
             for (Game game : gameController.getGames()) {
-                for (PlayerGameSession playerGameSession : game.playersGameSessions) {
+                for (PlayerGameSession playerGameSession : game.getPlayersGameSessions()) {
                     if (playerGameSession.player.equals(gameController.getPlayerBySub(playerSub))) {
                         gameForPlayer = game;
                         break;
@@ -143,5 +145,35 @@ public class GameController extends AbstractGameController {
             }
         }
         return gameForPlayer;
+    }
+
+    public void moveChip(PlayerMove playerMove) {
+        Game game = this.getGameForPlayer(playerMove.getPlayerSub());
+        Player player = gameController.getPlayerBySub(playerMove.getPlayerSub());
+        if (game == null) {
+            IllegalStateException illegalStateException = new IllegalStateException("Player and/or Game not found");
+            illegalStateException.printStackTrace();
+            throw illegalStateException;
+        }
+
+        Integer playerIndexOnGame = null;
+        PlayerGameSession playerGameSession = null;
+        for (int i = 0; i < 3; i++) {
+            if (game.getPlayersGameSessions().get(i).player.equals(player)) {
+                playerIndexOnGame = i;
+            }
+        }
+
+        if (playerIndexOnGame == null) {
+            IllegalStateException illegalStateException = new IllegalStateException("Player index not found on game. This is not expected");
+            illegalStateException.printStackTrace();
+            throw illegalStateException;
+        }
+
+        if (game.getTurnIndex().equals(playerIndexOnGame)) {
+            Point point = new Point(playerMove.getX(), playerMove.getY());
+            game.getPlayersGameSessions().get(playerIndexOnGame).placeChip(point, playerMove.getCardIndex());
+        }
+        game.checkSequenceAndNextTurn(game.getPlayersGameSessions().get(playerIndexOnGame));
     }
 }

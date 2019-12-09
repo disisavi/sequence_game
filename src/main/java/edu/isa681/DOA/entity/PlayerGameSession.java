@@ -18,7 +18,7 @@ public class PlayerGameSession {
     @JsonIgnore
     Game game;
 
-    void placeChip(Point point, Integer cardIndex) {
+    public void placeChip(Point point, Integer cardIndex) {
         if (cardsList.size() > cardIndex && cardIndex > -1) {
             this.game.placeChip(this, point, cardIndex);
         } else {

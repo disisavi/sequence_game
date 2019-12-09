@@ -8,13 +8,15 @@ import java.util.Map;
 public class PlayerInfoMessage {
     private Boolean gotMessage;
     private String errorMessage;
-    private Map<String, String> playerSateMap; // <playerSub, PlayerSub>
+    private Map<String, String> playerSateMap; // <playerSub, playerName>
 
     public PlayerInfoMessage() {
         playerSateMap = new HashMap<>();
     }
 
     public Boolean getGotMessage() {
+        int i = 0;
+        String l = Integer.toString(i);
         return gotMessage;
     }
 
