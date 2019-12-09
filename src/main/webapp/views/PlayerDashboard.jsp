@@ -24,13 +24,13 @@
 
 <div class="container">
     <div class="jumbotron">
-        <h1 class="display-4">Welcome <span id="namePLaceHolder"></span></h1>
+        <h1 class="display-4">Welcome <span id="namePlaceHolder"></span></h1>
         <p class="lead">We are ready to shuffle the cards.. </p>
         <hr class="my-4">
     </div>
     <div>
-        <h3> Please select from the player below to invite for the next game</h3>
-        <form id="form">
+        <h3> Please select two players below to invite for the next game</h3>
+        <form id="playerForm" name="submitplayer" method="get">
         </form>
     </div>
 </div>
