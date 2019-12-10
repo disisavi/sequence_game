@@ -173,6 +173,10 @@ public class GameController extends AbstractGameController {
         if (game.getTurnIndex().equals(playerIndexOnGame)) {
             Point point = new Point(playerMove.getX(), playerMove.getY());
             game.getPlayersGameSessions().get(playerIndexOnGame).placeChip(point, playerMove.getCardIndex());
+        } else {
+            IllegalStateException illegalStateException = new IllegalStateException("Not Your turn!!");
+            illegalStateException.printStackTrace();
+            throw illegalStateException;
         }
         game.checkSequenceAndNextTurn(game.getPlayersGameSessions().get(playerIndexOnGame));
     }

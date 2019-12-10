@@ -119,16 +119,24 @@ public class GameService {
     @Path("/move")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response moveChip(PlayerMove playerMove) {
-        if (playerMove.getPlayerSub() == null) {
-            IllegalStateException illegalStateException = new IllegalStateException("Player Information Not provided");
-            illegalStateException.printStackTrace();
-            throw illegalStateException;
+        try {
+
+
+            if (playerMove.getPlayerSub() == null) {
+                IllegalStateException illegalStateException = new IllegalStateException("Player Information Not provided");
+                illegalStateException.printStackTrace();
+                throw illegalStateException;
+            }
+
+            gameController = GameController.getGameController();
+            gameController.moveChip(playerMove);
+            return Response.status(HttpServletResponse.SC_OK).build();
+        } catch (Exception ex) {
+            return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
+                    .entity(ex.getMessage())
+                    .type(MediaType.TEXT_PLAIN)
+                    .build();
         }
-
-        gameController = GameController.getGameController();
-        gameController.moveChip(playerMove);
-
-        return Response.status(HttpServletResponse.SC_OK).build();
     }
 }
 

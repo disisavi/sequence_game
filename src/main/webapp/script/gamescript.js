@@ -85,6 +85,69 @@ function calculateCellNumber(cellNumber) {
     return cellString;
 }
 
+function submitInviteMessage() {
+    let errorID = "error";
+    let cellid = document.getElementById("IDform").value;
+    let cardIndex = document.getElementById("Cindexform").value;
+    let errorInForm = false;
+
+    if (cellid == null || cellid.length === 0) {
+        document.getElementById(errorID).innerHTML += "<div>Please enter cell number</div>";
+        errorInForm = true;
+    } else if (cellid.charAt(1) !== ',' || cellid.length !== 3) {
+        document.getElementById(errorID).innerHTML += "<div>Please enter cellID in X,Y format as displayed in the board</div>";
+        errorInForm = true
+    }
+
+    if (cardIndex == null || cardIndex.length === 0) {
+        document.getElementById(errorID).innerHTML += "<div>Please enter Card Index</div>";
+        errorInForm = true;
+    } else if (cardIndex.length !== 1) {
+        document.getElementById(errorID).innerHTML += "<div>Please enter card number as a single digit as displayed</div>";
+        errorInForm = true
+    }
+    if (!errorInForm) {
+        //Construction of message begins;
+        let playerMove = new PlayerMove(playerSub);
+        try {
+            playerMove.x = parseInt(cellid.charAt(0));
+            playerMove.y = parseInt(cellid.charAt(2));
+            playerMove.cardIndex = parseInt(cardIndex);
+            sendPlayerMove(playerMove);
+        } catch (ex) {
+            console.log(ex);
+            document.getElementById(errorID).innerHTML = "<div>Please use numbers only</div>";
+        }
+    }
+    return false;
+}
+
+function sendPlayerMove(playerMove) {
+    const url = param + 'move';
+    let xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            console.log(xhr.status);
+            if (xhr.status === 500) {
+                displayError(xhr.responseText, true);
+            }
+        }
+    };
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify(playerMove));
+}
+
+
+function displayError(message, clearMessage = false) {
+    let errorID = "displayError";
+    if (clearMessage) {
+        document.getElementById(errorID).innerHTML = "";
+    }
+    document.getElementById(errorID).innerHTML += "<div>" + message + "</div>";
+}
+
 window.onload = function () {
     loadData();
     getPlayerData();

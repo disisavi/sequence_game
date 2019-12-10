@@ -20,46 +20,51 @@
 </head>
 <body>
 <div class="cover-container">
+    <div id="displayError"></div>
     <div class="seq-grid">
         <div class="seq-game" id="parentGrid">
         </div>
     </div>
-    <div class="row">
-        <div class="player-container col-2">
-            <div role="alert" id="turnPlaceHolder">
-            </div>
-        </div>
-        <div class="player-container col-6">
-            <div id="playerInfo"></div>
-        </div>
-        <div class="player-container col-4">
-            <form>
-                <div class="form-row align-items-center">
-                    <div class="col-auto">
-                        <label class="sr-only" for="IDform">X,Y as seen on form</label>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">ID-</div>
-                            </div>
-                            <input type="text" class="form-control" id="IDform"
-                                   placeholder="X,Y as seen on form">
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <label class="sr-only" for="Cindexform">Index Card</label>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">ID-</div>
-                            </div>
-                            <input type="text" class="form-control" id="Cindexform"
-                                   placeholder="Index of card">
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <button type="submit" class="btn btn-primary mb-2">Submit</button>
-                    </div>
+    <div class="container">
+        <div class="row">
+            <div class="player-container col-2">
+                <div role="alert" id="turnPlaceHolder">
                 </div>
-            </form>
+            </div>
+            <div class="player-container col-6">
+                <div id="playerInfo"></div>
+            </div>
+            <div class="player-container col-4">
+                <form id="playerInviteForm">
+                    <div class="form-row align-items-center">
+                        <div class="col-auto">
+                            <label class="sr-only" for="IDform">X,Y as seen on form</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">ID-</div>
+                                </div>
+                                <input type="text" class="form-control" id="IDform"
+                                       placeholder="X,Y as seen on form">
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <label class="sr-only" for="Cindexform">Index Card</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">ID-</div>
+                                </div>
+                                <input type="text" class="form-control" id="Cindexform"
+                                       placeholder="Index of card">
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-primary mb-2" onClick="submitInviteMessage()">Submit
+                            </button>
+                        </div>
+                        <div id="error" class="error"></div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -71,5 +76,6 @@
     const playerSub = '<%=request.getParameter("playerSub")%>';
 </script>
 <script src="../script/gamescript.js"></script>
+<script src="../script/messageClasses/PlayerMove.js"></script>
 </body>
 </html>
