@@ -1,15 +1,14 @@
 let isFormNotChecked = true;
-let index = 0;
 
 window.onload = function (ev) {
-    var interval;
+
     if (playerName == null || playerSub == null) {
         displayError("Player could not be found. You are in wrong page. Will redirect you to login screen in 5 seconds")
     } else {
         document.getElementById("namePlaceHolder").innerHTML = playerName;
     }
-    interval = setInterval(getPlayersOnline, 5000);
-    //sendInvite();
+
+    getPlayersOnline();
 };
 
 
@@ -19,11 +18,10 @@ function getPlayersOnline() {
         let xhr = new XMLHttpRequest();
 
         let playerInviteMessage = new PlayerInviteMessage(playerSub);
-        //playerInviteMessage.playerStubsInvited.push(stub of the other players we want to add )
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 try {
-                    if (xhr.status == 200) {
+                    if (xhr.status === 200) {
                         let playerMap = generatePlayerMap(xhr.responseText);
                         drawForm(playerMap);
                     } else {
@@ -38,7 +36,9 @@ function getPlayersOnline() {
         xhr.open('POST', url);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(playerInviteMessage));
+        setTimeout(getPlayersOnline, 5000);
     }
+
 }
 
 function generatePlayerMap(response) {
@@ -54,26 +54,22 @@ function generatePlayerMap(response) {
 
 
 function drawForm(playerSateResponse) {
-    var entry;
-    var name;
-    var value;
+    let entry;
+
     console.log(playerSateResponse);
     entry = playerSateResponse;
 
     document.getElementById('playerForm').innerHTML = "";
-    for (name in entry) {
-        document.getElementById('playerForm').innerHTML += "<div><input type='checkbox' name='players' id= 'c" + index + "' value = '" + entry[name] + "' onchange='toggleCheckbox()' />" + entry[name] + "</div>";
+    for (let index in entry) {
+        document.getElementById('playerForm').innerHTML += "<div><input type='checkbox' name='players' id= 'c" + index + "' value = '" + entry[index] + "' onchange='toggleCheckbox()' />" + entry[index] + "</div>";
         console.log("c" + index + "");
-        index++;
     }
-
 }
 
 function display(msg, index) {
     document.getElementById('myForm').innerHTML += "<div id='checked'><input type='checkbox' id= '" + index + "' value = '" + msg + "' />" + msg + "</div>";
-    if (document.getElementById("checked").checked == true) {
+    if (document.getElementById("checked").checked === true) {
         console.log('its checked');
-
     }
 }
 
@@ -85,15 +81,13 @@ function toggleCheckbox() {
 }
 
 function checkboxlimit(checkgroup, limit) {
-    var checkgroup = checkgroup
-    var limit = limit
-    for (var i = 0; i < checkgroup.length; i++) {
+    for (let i = 0; i < checkgroup.length; i++) {
         checkgroup[i].onclick = function () {
-            var checkedcount = 0
+            let checkedcount = 0;
             for (var i = 0; i < checkgroup.length; i++)
-                checkedcount += (checkgroup[i].checked) ? 1 : 0
+                checkedcount += (checkgroup[i].checked) ? 1 : 0;
             if (checkedcount > limit) {
-                alert("You can only select a maximum of " + limit + " players")
+                alert("You can only select a maximum of " + limit + " players");
                 this.checked = false
             }
         }
