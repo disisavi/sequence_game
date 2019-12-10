@@ -1,9 +1,11 @@
 package edu.isa681.web.dashboard;
 
 
+import edu.isa681.DOA.entity.Player;
 import edu.isa681.DOA.entity.type.PlayerSate;
-import edu.isa681.messages.PlayerInfoMessage;
-import edu.isa681.messages.PlayerInviteMessage;
+import edu.isa681.game.Game;
+import edu.isa681.web.messages.PlayerInfoMessage;
+import edu.isa681.web.messages.PlayerInviteMessage;
 import edu.isa681.web.game.GameController;
 import org.apache.log4j.Logger;
 
@@ -27,8 +29,8 @@ public class DashboardAPI {
         try {
 
             for (String playerStub : playerInviteMessage.getPlayerStubsInvited()) {
-                if (gameController.getPlayers().get(playerStub) == null
-                        || !(gameController.getPlayers().get(playerStub).getPlayerSate().equals(PlayerSate.Online))) {
+                if (gameController.getPlayerBySub(playerStub) == null
+                        || !(gameController.getPlayerBySub(playerStub).getPlayerSate().equals(PlayerSate.Online))) {
                     throw new IllegalStateException("Players selected doesnt seems to be available to play");
                 }
             }
@@ -52,11 +54,11 @@ public class DashboardAPI {
             if (playerInviteMessage.getPlayerSelfStub() == null) {
                 throw new IllegalStateException("Player info Not included with the request");
             }
-            if (!(gameController.getPlayers().containsKey(playerInviteMessage.getPlayerSelfStub()))) {
+            if (gameController.getPlayerBySub(playerInviteMessage.getPlayerSelfStub()) == null) {
                 throw new IllegalStateException("Incorrect player info provided");
             }
             gameController.playerOnlineRightNow(playerInfoMessage);
-            playerInfoMessage.getPlayerSateMap().remove(gameController.getPlayerBySub(playerInviteMessage.getPlayerSelfStub()).getName());
+            playerInfoMessage.getPlayerSateMap().remove(playerInviteMessage.getPlayerSelfStub());
             playerInfoMessage.setGotMessage(true);
         } catch (IllegalStateException ex) {
             ex.printStackTrace();
@@ -71,4 +73,32 @@ public class DashboardAPI {
         return playerInfoMessage;
     }
 
+    @POST
+    @Path("/isInvited")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Boolean isInvited(String playerSub) {
+
+        Player player = gameController.getPlayerBySub(playerSub);
+        if (player == null) {
+            throw new IllegalStateException("No such player found");
+        }
+        return player.getPlayerSate().equals(PlayerSate.Invited);
+
+
+    }
+
+    @POST
+    @Path("/redirectToGame")
+    @Consumes(MediaType.TEXT_PLAIN)
+    public Response redirectToGame(String playerSub) {
+        Response.ResponseBuilder responseBuilder = Response.status(HttpServletResponse.SC_OK);
+
+        Game game = gameController.getGameForPlayer(playerSub);
+        if (game == null) {
+            throw new IllegalStateException("Player is not registered to any game");
+        }
+
+        return Response.seeOther(URI.create("../views/Players.jsp")).build();
+    }
 }

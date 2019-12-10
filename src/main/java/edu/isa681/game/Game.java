@@ -36,10 +36,12 @@ public class Game {
             PlayerGameSession player = playersGameSessions.get(i);
             player.setGame(this);
             player.setChip(chips[i]);
+
         }
         turnIndex = 0;
         this.board = new Board();
         this.deck = new Deck();
+        this.distributeCards();
         this.gameState = new GameState(this);
         log.info("Game creation complete.");
     }
@@ -47,7 +49,7 @@ public class Game {
     private void initPlayerSession(List<Player> players) {
         log.info("New Player session initiation started");
         for (Player player : players) {
-            if (player.getPlayerSate() == PlayerSate.Online) {
+            if (player.getPlayerSate() == PlayerSate.Invited) {
                 this.playersGameSessions.add(player.getNewPlayerSession());
                 log.info("Session for Player " + player.getName() + "Initiated");
             } else {
@@ -140,4 +142,39 @@ public class Game {
         return gameState;
     }
 
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public void setDeck(Deck deck) {
+        this.deck = deck;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public ArrayList<PlayerGameSession> getPlayersGameSessions() {
+        return playersGameSessions;
+    }
+
+    public void setPlayersGameSessions(ArrayList<PlayerGameSession> playersGameSessions) {
+        this.playersGameSessions = playersGameSessions;
+    }
+
+    public Integer getTurnIndex() {
+        return turnIndex;
+    }
+
+    public void setTurnIndex(Integer turnIndex) {
+        this.turnIndex = turnIndex;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
 }

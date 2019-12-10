@@ -5,9 +5,14 @@
     margin: auto;
 }
 
+.seq-grid {
+    width: 90%;
+    margin: auto;
+}
+
 .seq-card {
-    border: 2px solid blue;
-    width: 10%;
+    border: 2px solid cornflowerblue;
+    width: 4%;
     margin: 1px;
 }
 
@@ -17,5 +22,11 @@
 }
 
 #parentGrid {
-    margin-top: 10%;
+    margin-top: 5%;
+}
+
+.seq-player-card {
+    border: 3px solid slategrey;
+    width: 2%;
+    margin: 1px;
 }

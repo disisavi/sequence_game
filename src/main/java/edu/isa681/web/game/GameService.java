@@ -1,13 +1,22 @@
 package edu.isa681.web.game;
 
-import com.google.gson.*;
 import edu.isa681.DOA.entity.Player;
+import edu.isa681.DOA.entity.PlayerGameSession;
 import edu.isa681.DOA.entity.type.PlayerSate;
 import edu.isa681.game.Game;
 import edu.isa681.game.GameState;
+import edu.isa681.web.messages.PlayerMove;
+import org.apache.http.HttpMessage;
 
-import javax.ws.rs.*;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,41 +25,111 @@ import java.util.Arrays;
 public class GameService {
     private GameController gameController;
 
-    @GET
+    @POST
     @Path("/getBoard")
     @Produces(MediaType.APPLICATION_JSON)
-    public GameState initBoardData() {
-        Player player1 = new Player("Avi", "a@gmail.com");
-        Player player2 = new Player("sravya", "a@gmail.com");
-        Player player3 = new Player("sinchu", "a@gmail.com");
-        player1.setPlayerSate(PlayerSate.Online);
-        player2.setPlayerSate(PlayerSate.Online);
-        player3.setPlayerSate(PlayerSate.Online);
-        Game game = new Game(new ArrayList<>(Arrays.asList(player1, player2, player3)));
-        return game.getGameState();
+    public GameState boardData(String playerSub) {
+        GameState gameState = null;
+        gameController = GameController.getGameController();
+        if (gameController.getPlayerBySub(playerSub) == null) {
+            IllegalStateException ex = new IllegalStateException("No such player found");
+            ex.printStackTrace();
+            throw ex;
+        } else {
+            Game game = gameController.getGameForPlayer(playerSub);
+            if (game == null) {
+                IllegalStateException ex = new IllegalStateException("No Game attached with the player found");
+                ex.printStackTrace();
+                throw ex;
+            }
+            gameState = game.getGameState();
+        }
+        return gameState;
     }
 
-    /**
-     * @param incomingMessage of the format {playerTokens:[{playerToken : sampletoken},{playerToken : sampletoken2}]}
-     */
+
     @POST
     @Path("/registerPlayer")
     @Consumes(MediaType.TEXT_PLAIN)
-    public void createGame(String incomingMessage) {
-        JsonObject playersToAdd = new JsonParser().parse(incomingMessage).getAsJsonObject();
+    public void registerPlayerToGame(String playerSub) {
         gameController = GameController.getGameController();
-        try {
-            if (playersToAdd.getAsJsonArray("playerTokens").size() == 3) {
-                JsonArray playersTokens = playersToAdd.getAsJsonArray("playerTokens");
-                for (JsonElement playertoken : playersTokens) {
-                    //todo 1. make logic at gamecontroller level to check if the player is 1. registered and 2. online right now
-                    JsonElement asd = playersTokens.getAsJsonObject().get("playerToken");
-                }
+        if (gameController.getPlayerBySub(playerSub) != null) {
+            Player player = gameController.getPlayerBySub(playerSub);
+            if (gameController.isPlayerAttachedToGame(playerSub)) {
+                player.setPlayerSate(PlayerSate.Playing);
             } else {
-                throw new IllegalArgumentException("Please select correct number of players");
+                throw new IllegalStateException("No Such player attached to the game found");
             }
-        } catch (Exception ex) {
-            throw ex;
         }
     }
+
+    /**
+     * API to check if the game has been initiated.
+     * If all the players have joined the game.
+     **/
+    @POST
+    @Path("/playersJoined")
+    @Consumes(MediaType.TEXT_PLAIN)
+    public Boolean getPlayersJoined(String playerSub) {
+        boolean returnValue = true;
+        gameController = GameController.getGameController();
+        Game gameForPlayer = gameController.getGameForPlayer(playerSub);
+
+        if (gameForPlayer == null) {
+            throw new IllegalStateException("No Such player attached to the game found");
+        } else {
+            for (PlayerGameSession playerGameSession : gameForPlayer.getPlayersGameSessions()) {
+                if (playerGameSession.player.getPlayerSate() != PlayerSate.Playing) {
+                    returnValue = false;
+                    break;
+                }
+            }
+        }
+        return returnValue;
+    }
+
+    @POST
+    @Path("/getPlayerData")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public PlayerGameSession getPlayersData(String playerSub) {
+        gameController = GameController.getGameController();
+        PlayerGameSession returnPlayerGameSession = null;
+        Player player = gameController.getPlayerBySub(playerSub);
+        if (player == null) {
+            throw new IllegalStateException("No such player found on the game");
+        } else {
+            Game game = gameController.getGameForPlayer(playerSub);
+            if (game == null) {
+                throw new IllegalStateException("No game found for the player");
+            } else {
+                for (PlayerGameSession playerGameSession : game.getPlayersGameSessions()) {
+                    if (playerGameSession.player.equals(player)) {
+                        returnPlayerGameSession = playerGameSession;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return returnPlayerGameSession;
+    }
+
+    @POST
+    @Path("/move")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response moveChip(PlayerMove playerMove) {
+        if (playerMove.getPlayerSub() == null) {
+            IllegalStateException illegalStateException = new IllegalStateException("Player Information Not provided");
+            illegalStateException.printStackTrace();
+            throw illegalStateException;
+        }
+
+        gameController = GameController.getGameController();
+        gameController.moveChip(playerMove);
+
+        return Response.status(HttpServletResponse.SC_OK).build();
+    }
 }
+
+//todo -- players move

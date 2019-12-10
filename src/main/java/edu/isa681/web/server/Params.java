@@ -1,8 +1,8 @@
 package edu.isa681.web.server;
 
 public class Params {
-    private static Boolean isProd = false;
-    private static Boolean isIDE = false;
+    private static Boolean isProd = true;
+    private static Boolean isIDE = true;
 
     public static String getLoginParam() {
         if (isProd) {

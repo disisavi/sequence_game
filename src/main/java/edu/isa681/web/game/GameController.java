@@ -2,12 +2,15 @@ package edu.isa681.web.game;
 
 import com.google.api.client.auth.openidconnect.IdToken;
 import edu.isa681.DOA.entity.Player;
+import edu.isa681.DOA.entity.PlayerGameSession;
 import edu.isa681.DOA.entity.type.PlayerSate;
 import edu.isa681.game.Game;
-import edu.isa681.messages.PlayerInfoMessage;
-import edu.isa681.messages.PlayerInviteMessage;
+import edu.isa681.web.messages.PlayerInfoMessage;
+import edu.isa681.web.messages.PlayerInviteMessage;
 import edu.isa681.web.game.abstractClass.AbstractGameController;
+import edu.isa681.web.messages.PlayerMove;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,14 +48,16 @@ public class GameController extends AbstractGameController {
     private Player createPlayer(IdToken.Payload loginPayload) {
         String email = (String) loginPayload.get("email");
         String name = (String) loginPayload.get("name");
+        String sub = (String) loginPayload.get("sub");
 
         Player player = new Player(name, email);
+        player.setPlayerSub(sub);
 //        TODO :
 //        Put it on database
         return player;
     }
 
-    public Player getRegisterdPlayer(String email) {
+    private Player getRegisterdPlayer(String email) {
         //TODO :
         // Get player from persistence layer
         return null;
@@ -67,6 +72,7 @@ public class GameController extends AbstractGameController {
             player = createPlayer(loginPayload);
         }
         getPlayers().put(sub, player);
+        player.setPlayerSate(PlayerSate.Online);
     }
 
     /**
@@ -90,9 +96,7 @@ public class GameController extends AbstractGameController {
             Player player = getPlayerBySub(sub);
             getPlayers().remove(sub);
             putPlayerOnSession(loginPayload);
-            player.setPlayerSate(PlayerSate.Online);
         } else {
-            Player player = createPlayer(loginPayload);
             putPlayerOnSession(loginPayload);
         }
         return sub;
@@ -107,9 +111,69 @@ public class GameController extends AbstractGameController {
 
     public void playerOnlineRightNow(PlayerInfoMessage playerInfoMessage) {
 
-        List<Player> players = getPlayersNotOffline();
-        players.forEach(player -> playerInfoMessage.getPlayerSateMap().put(player.getName(), player.getPlayerSate()));
+        List<Player> players = getPlayersOnline();
+        players.forEach(player -> playerInfoMessage.getPlayerSateMap().put(player.getPlayerSub(), player.getName()));
 
     }
 
+    public Boolean isPlayerAttachedToGame(String PlayerSub) {
+        boolean isPlayerAttachedToGame = false;
+        if (gameController.getPlayerBySub(PlayerSub) != null) {
+            for (Game game : gameController.getGames()) {
+                for (PlayerGameSession playerGameSession : game.getPlayersGameSessions()) {
+                    if (playerGameSession.player.equals(gameController.getPlayerBySub(PlayerSub))) {
+                        isPlayerAttachedToGame = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return isPlayerAttachedToGame;
+    }
+
+    public Game getGameForPlayer(String playerSub) {
+        Game gameForPlayer = null;
+        gameController = GameController.getGameController();
+        if (gameController.getPlayerBySub(playerSub) != null) {
+            for (Game game : gameController.getGames()) {
+                for (PlayerGameSession playerGameSession : game.getPlayersGameSessions()) {
+                    if (playerGameSession.player.equals(gameController.getPlayerBySub(playerSub))) {
+                        gameForPlayer = game;
+                        break;
+                    }
+                }
+            }
+        }
+        return gameForPlayer;
+    }
+
+    public void moveChip(PlayerMove playerMove) {
+        Game game = this.getGameForPlayer(playerMove.getPlayerSub());
+        Player player = gameController.getPlayerBySub(playerMove.getPlayerSub());
+        if (game == null) {
+            IllegalStateException illegalStateException = new IllegalStateException("Player and/or Game not found");
+            illegalStateException.printStackTrace();
+            throw illegalStateException;
+        }
+
+        Integer playerIndexOnGame = null;
+        PlayerGameSession playerGameSession = null;
+        for (int i = 0; i < 3; i++) {
+            if (game.getPlayersGameSessions().get(i).player.equals(player)) {
+                playerIndexOnGame = i;
+            }
+        }
+
+        if (playerIndexOnGame == null) {
+            IllegalStateException illegalStateException = new IllegalStateException("Player index not found on game. This is not expected");
+            illegalStateException.printStackTrace();
+            throw illegalStateException;
+        }
+
+        if (game.getTurnIndex().equals(playerIndexOnGame)) {
+            Point point = new Point(playerMove.getX(), playerMove.getY());
+            game.getPlayersGameSessions().get(playerIndexOnGame).placeChip(point, playerMove.getCardIndex());
+        }
+        game.checkSequenceAndNextTurn(game.getPlayersGameSessions().get(playerIndexOnGame));
+    }
 }

@@ -24,9 +24,9 @@ class GameTest {
         player2 = new Player("sravya", "a@gmail.com");
         player3 = new Player("sinchu", "a@gmail.com");
         player4 = new Player("Prasad", "a@gmail.com");
-        player1.setPlayerSate(PlayerSate.Online);
-        player2.setPlayerSate(PlayerSate.Online);
-        player3.setPlayerSate(PlayerSate.Online);
+        player1.setPlayerSate(PlayerSate.Invited);
+        player2.setPlayerSate(PlayerSate.Invited);
+        player3.setPlayerSate(PlayerSate.Invited);
     }
 
     @Test
@@ -40,7 +40,6 @@ class GameTest {
     @Test
     void distributeCards() {
         game = new Game(Arrays.asList(player1, player2, player3));
-        game.distributeCards();
         assertNotEquals(game.playersGameSessions.get(0).getChip(), game.playersGameSessions.get(1).getChip());
         game.playersGameSessions.forEach(playerGameSession -> assertEquals(playerGameSession.getCardsList().size(), 6));
         for (PlayerGameSession playerGameSession : game.playersGameSessions) {

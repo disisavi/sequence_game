@@ -10,6 +10,7 @@ public class Player {
     String emailID;
     Integer playerID;
     PlayerSate playerSate;
+    String playerSub;
 
     public Player(String name, String emailID) {
         if (validateEmailID(emailID)) {
@@ -32,7 +33,7 @@ public class Player {
     }
 
     public PlayerGameSession getNewPlayerSession() {
-        this.playerSate = PlayerSate.Playing;
+        this.playerSate = PlayerSate.Invited;
         return new PlayerGameSession(this);
     }
 
@@ -68,7 +69,18 @@ public class Player {
         this.playerSate = playerSate;
     }
 
+    public String getPlayerSub() {
+        return playerSub;
+    }
 
+    public void setPlayerSub(String playerSub) {
+        this.playerSub = playerSub;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return ((Player) obj).emailID.equalsIgnoreCase(this.emailID);
+    }
 }
 
 
