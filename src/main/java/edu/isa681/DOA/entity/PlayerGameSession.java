@@ -31,6 +31,7 @@ public class PlayerGameSession {
     PlayerGameSession(Player player) {
         this.player = player;
         this.cardsList = new ArrayList<>();
+        this.numberChipsAvailable = 35;
     }
 
     public void pickNextCard(Card cardToThrow, Card cardToPick) {

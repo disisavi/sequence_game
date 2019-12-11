@@ -32,7 +32,11 @@ function printBoard(outputJsonString) {
     printTurn(cell.currentPlayerSub, cell.currentPlayer);
     let id = "row" + 0;
     for (let i in cell.boardStateSnapShot) {
-        document.getElementById(id).innerHTML += "<div class='seq-card col'  ><div>" + cell.boardStateSnapShot[i].cellType.cardType + "</div><div> " + cell.boardStateSnapShot[i].cellType.cardValue + "</div><div>ID - " + calculateCellNumber(i) + "</div></div>";
+        let chip = "";
+        if (cell.boardStateSnapShot[i].chip !== null) {
+            chip = cell.boardStateSnapShot[i].chip;
+        }
+        document.getElementById(id).innerHTML += "<div class='seq-card col' style='color: " + chip + "' ><div>" + cell.boardStateSnapShot[i].cellType.cardType + "</div><div> " + cell.boardStateSnapShot[i].cellType.cardValue + "</div><div>ID - " + calculateCellNumber(i) + "</div></div>";
         if (i > 0 && ((parseInt(i) + 1) % 10) === 0) {
             let nextID = "row" + i;
             document.getElementById(id).innerHTML += "</div>";
@@ -44,6 +48,7 @@ function printBoard(outputJsonString) {
 
 function printPlayerInfo(outputJsonString) {
     document.getElementById("playerInfo").className = "";
+    document.getElementById("playerInfo").innerHTML = "";
     let cell = JSON.parse(outputJsonString);
 
     document.getElementById("playerInfo").innerHTML += "<div class = 'row seq-row' id = 'rowPlayer'>";
@@ -131,6 +136,8 @@ function sendPlayerMove(playerMove) {
             console.log(xhr.status);
             if (xhr.status === 500) {
                 displayError(xhr.responseText, true);
+            } else if (xhr.status === 200) {
+                getPlayerData();
             }
         }
     };

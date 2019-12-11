@@ -98,6 +98,7 @@ public class Game {
                 }
                 Card cardToPick = deck.dealCard();
                 playerGameSession.pickNextCard(card, cardToPick);
+                playerGameSession.setNumberChipsAvailable(playerGameSession.getNumberChipsAvailable() - 1);
             } catch (ArrayIndexOutOfBoundsException ex) {
                 log.info("Card position given is out of bound... No card of such an index exist");
                 log.info("Tried to get card -- " + cardIndex + " out of a total " + playerGameSession.getCardsList().size(), ex);
