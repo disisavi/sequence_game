@@ -11,6 +11,8 @@ import edu.isa681.web.game.abstractClass.AbstractGameController;
 import edu.isa681.web.messages.PlayerMove;
 
 import java.awt.*;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,7 +135,6 @@ public class GameController extends AbstractGameController {
 
     public Game getGameForPlayer(String playerSub) {
         Game gameForPlayer = null;
-        gameController = GameController.getGameController();
         if (gameController.getPlayerBySub(playerSub) != null) {
             for (Game game : gameController.getGames()) {
                 for (PlayerGameSession playerGameSession : game.getPlayersGameSessions()) {

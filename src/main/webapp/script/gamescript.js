@@ -119,6 +119,7 @@ function submitInviteMessage() {
             playerMove.y = parseInt(cellid.charAt(2));
             playerMove.cardIndex = parseInt(cardIndex);
             sendPlayerMove(playerMove);
+            document.getElementById(errorID).innerHTML = "";
         } catch (ex) {
             console.log(ex);
             document.getElementById(errorID).innerHTML = "<div>Please use numbers only</div>";
@@ -138,6 +139,7 @@ function sendPlayerMove(playerMove) {
                 displayError(xhr.responseText, true);
             } else if (xhr.status === 200) {
                 getPlayerData();
+                displayError("", true);
             }
         }
     };

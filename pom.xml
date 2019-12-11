@@ -142,6 +142,13 @@
             <version>2.1.1</version>
         </dependency>
 
+
+        <!-- https://mvnrepository.com/artifact/com.google.crypto.tink/tink -->
+        <dependency>
+            <groupId>com.google.crypto.tink</groupId>
+            <artifactId>tink</artifactId>
+            <version>1.3.0-rc2</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -149,6 +156,11 @@
             <version>2.8.5</version>
         </dependency>
 
+        <dependency>                        <!-- Google Cloud Client Library for Java -->
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud</artifactId>
+            <version>0.47.0-alpha</version>
+        </dependency>
         <dependency>                        <!-- Google API client - for stuff that's not in gcloud-->
             <groupId>com.google.api-client</groupId>
             <artifactId>google-api-client</artifactId>
