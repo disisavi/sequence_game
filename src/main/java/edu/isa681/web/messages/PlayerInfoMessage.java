@@ -1,7 +1,5 @@
 package edu.isa681.web.messages;
 
-import edu.isa681.DOA.entity.type.PlayerSate;
-
 import java.util.HashMap;
 import java.util.Map;
 

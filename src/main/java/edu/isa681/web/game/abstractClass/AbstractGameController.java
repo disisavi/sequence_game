@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AbstractGameController {
     private ConcurrentHashMap<String, Player> players;
     private Set<Game> games;
-    EncryptionRoutine encryptionRoutine;
+    protected EncryptionRoutine encryptionRoutine;
 
     public AbstractGameController() {
         players = new ConcurrentHashMap<>();
@@ -19,7 +19,7 @@ public class AbstractGameController {
         encryptionRoutine = EncryptionRoutine.getEncryptionRoutine();
     }
 
-    protected ConcurrentHashMap<String, Player> getPlayers() {
+    public ConcurrentHashMap<String, Player> getPlayers() {
         return players;
     }
 

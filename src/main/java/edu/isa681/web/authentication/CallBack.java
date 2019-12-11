@@ -20,6 +20,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -34,7 +35,7 @@ public class CallBack {
     private HttpServletRequest request;
 
     @GET()
-    public Response loginCallBack(@Context ServletContext context) throws IOException {
+    public Response loginCallBack(@Context ServletContext context) throws IOException, GeneralSecurityException {
 
         // Ensure that this is no request forgery going on, and that the user
         // sending us this connect request is the user that was supposed to

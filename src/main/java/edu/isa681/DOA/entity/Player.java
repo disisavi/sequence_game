@@ -2,34 +2,18 @@ package edu.isa681.DOA.entity;
 
 import edu.isa681.DOA.entity.type.PlayerSate;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Arrays;
 
 public class Player {
-    String name;
-    String emailID;
+    byte[] name;
+    byte[] emailID;
     Integer playerID;
     PlayerSate playerSate;
     String playerSub;
 
-    public Player(String name, String emailID) {
-        if (validateEmailID(emailID)) {
-            this.emailID = emailID;
-            this.name = name;
-        } else throw new IllegalArgumentException("Email format Incorrect");
-    }
-
-    /***
-     *
-     * @param emailID  : emailID for the player
-     * @return Boolean : Does it match the pattern?
-     * We have all the characters permitted by RFC 5322 allowed before @
-     * After @, its only gmail.com, as we are using only google SSO at launch
-     */
-    private Boolean validateEmailID(String emailID) {
-        Pattern pattern = Pattern.compile("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@gmail.com$");
-        Matcher matcher = pattern.matcher(emailID);
-        return matcher.matches();
+    public Player(byte[] name, byte[] emailID) {
+        this.name = name;
+        this.emailID = emailID;
     }
 
     public PlayerGameSession getNewPlayerSession() {
@@ -37,19 +21,19 @@ public class Player {
         return new PlayerGameSession(this);
     }
 
-    public String getName() {
+    public byte[] getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(byte[] name) {
         this.name = name;
     }
 
-    public String getEmailID() {
+    public byte[] getEmailID() {
         return emailID;
     }
 
-    public void setEmailID(String emailID) {
+    public void setEmailID(byte[] emailID) {
         this.emailID = emailID;
     }
 
@@ -79,7 +63,7 @@ public class Player {
 
     @Override
     public boolean equals(Object obj) {
-        return ((Player) obj).emailID.equalsIgnoreCase(this.emailID);
+        return Arrays.equals(((Player) obj).emailID, this.emailID);
     }
 }
 

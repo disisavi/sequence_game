@@ -11,7 +11,7 @@ public class GameState {
     Boolean isSequenceDone;
     List<Board.Cell> boardStateSnapShot;
     Player playerWon;
-    String currentPlayer;
+    byte[] currentPlayer;
     String currentPlayerSub;
 
 
@@ -65,11 +65,11 @@ public class GameState {
         this.boardStateSnapShot = boardStateSnapShot;
     }
 
-    public String getCurrentPlayer() {
+    public byte[] getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public void setCurrentPlayer(String currentPlayer) {
+    public void setCurrentPlayer(byte[] currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 

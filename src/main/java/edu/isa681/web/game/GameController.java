@@ -4,6 +4,7 @@ import com.google.api.client.auth.openidconnect.IdToken;
 import edu.isa681.DOA.entity.Player;
 import edu.isa681.DOA.entity.PlayerGameSession;
 import edu.isa681.DOA.entity.type.PlayerSate;
+import edu.isa681.DOA.util.Util;
 import edu.isa681.game.Game;
 import edu.isa681.web.messages.PlayerInfoMessage;
 import edu.isa681.web.messages.PlayerInviteMessage;
@@ -11,7 +12,6 @@ import edu.isa681.web.game.abstractClass.AbstractGameController;
 import edu.isa681.web.messages.PlayerMove;
 
 import java.awt.*;
-import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,16 +47,22 @@ public class GameController extends AbstractGameController {
     }
 
 
-    private Player createPlayer(IdToken.Payload loginPayload) {
+    private Player createPlayer(IdToken.Payload loginPayload) throws GeneralSecurityException {
         String email = (String) loginPayload.get("email");
         String name = (String) loginPayload.get("name");
         String sub = (String) loginPayload.get("sub");
+        if (Util.validateEmailID(email)) {
+            byte[] encryptedName = this.encryptionRoutine.encrypt(name, sub);
+            byte[] encryptedEmail = this.encryptionRoutine.encrypt(email, sub);
 
-        Player player = new Player(name, email);
-        player.setPlayerSub(sub);
+            Player player = new Player(encryptedName, encryptedEmail);
+            player.setPlayerSub(sub);
 //        TODO :
 //        Put it on database
-        return player;
+            return player;
+        } else {
+            throw new IllegalStateException("Invalid Email");
+        }
     }
 
     private Player getRegisterdPlayer(String email) {
@@ -65,7 +71,7 @@ public class GameController extends AbstractGameController {
         return null;
     }
 
-    private void putPlayerOnSession(IdToken.Payload loginPayload) {
+    private void putPlayerOnSession(IdToken.Payload loginPayload) throws GeneralSecurityException {
         String email = (String) loginPayload.get("email");
         String sub = (String) loginPayload.get("sub");
 
@@ -92,7 +98,7 @@ public class GameController extends AbstractGameController {
      * if no
      * create the player and put it in session
      */
-    public String signUporInNewPlayer(IdToken.Payload loginPayload) {
+    public String signUporInNewPlayer(IdToken.Payload loginPayload) throws GeneralSecurityException {
         String sub = (String) loginPayload.get("sub");
         if (isPlayerSingedIn(sub)) {
             Player player = getPlayerBySub(sub);
@@ -114,7 +120,13 @@ public class GameController extends AbstractGameController {
     public void playerOnlineRightNow(PlayerInfoMessage playerInfoMessage) {
 
         List<Player> players = getPlayersOnline();
-        players.forEach(player -> playerInfoMessage.getPlayerSateMap().put(player.getPlayerSub(), player.getName()));
+        players.forEach(player -> {
+            try {
+                playerInfoMessage.getPlayerSateMap().put(player.getPlayerSub(), encryptionRoutine.decrypt(player.getName(), player.getPlayerSub()));
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            }
+        });
 
     }
 

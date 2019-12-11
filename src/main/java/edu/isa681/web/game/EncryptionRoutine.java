@@ -15,10 +15,10 @@ import java.security.GeneralSecurityException;
 
 public class EncryptionRoutine {
     private static EncryptionRoutine encryptionRoutine;
-    Aead aead;
-    KeysetHandle keysetHandle;
+    private Aead aead;
+    private KeysetHandle keysetHandle;
 
-    public EncryptionRoutine() {
+    private EncryptionRoutine() {
         try {
             initEncryption();
             aead = keysetHandle.getPrimitive(Aead.class);
@@ -64,7 +64,7 @@ public class EncryptionRoutine {
                     ex.printStackTrace();
                     System.out.println("Will read from the file locally for now");
                 }
-            }
+            }//TODO -- > Write the else for this.
         } catch (IOException e) {
             e.printStackTrace();
         }
