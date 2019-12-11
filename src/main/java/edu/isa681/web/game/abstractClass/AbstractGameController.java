@@ -3,6 +3,7 @@ package edu.isa681.web.game.abstractClass;
 import edu.isa681.DOA.entity.Player;
 import edu.isa681.DOA.entity.type.PlayerSate;
 import edu.isa681.game.Game;
+import edu.isa681.web.game.EncryptionRoutine;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,10 +11,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AbstractGameController {
     private ConcurrentHashMap<String, Player> players;
     private Set<Game> games;
+    EncryptionRoutine encryptionRoutine;
 
     public AbstractGameController() {
         players = new ConcurrentHashMap<>();
         games = new HashSet<>();
+        encryptionRoutine = EncryptionRoutine.getEncryptionRoutine();
     }
 
     protected ConcurrentHashMap<String, Player> getPlayers() {
