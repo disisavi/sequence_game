@@ -15,6 +15,7 @@
             type="javascript"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             type="javascript"></script>
+            <link href="../style/stylesheet.css" rel="stylesheet"/>
 </head>
 <body>
 <!--[if IE]>
