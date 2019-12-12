@@ -30,8 +30,9 @@
     </div>
     <div>
         <h3> Please select two players below to invite for the next game</h3>
-        <form id="playerForm" name="submitplayer" method="get">
+        <form id="playerForm">
         </form>
+        <form id="submitPlayers" method="GET" name="playerList" ></form>
     </div>
 </div>
 <script>
