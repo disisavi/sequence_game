@@ -1,4 +1,6 @@
 let isFormNotChecked = true;
+let index = 0;
+var selectedPlayer = new Array();
 
 window.onload = function (ev) {
 
@@ -7,8 +9,7 @@ window.onload = function (ev) {
     } else {
         document.getElementById("namePlaceHolder").innerHTML = playerName;
     }
-
-    getPlayersOnline();
+    interval = setInterval(getPlayersOnline, 1000);
 };
 
 
@@ -18,6 +19,7 @@ function getPlayersOnline() {
         let xhr = new XMLHttpRequest();
 
         let playerInviteMessage = new PlayerInviteMessage(playerSub);
+        console.log(playerInviteMessage);
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 try {
@@ -56,29 +58,28 @@ function generatePlayerMap(response) {
 function drawForm(playerSateResponse) {
     let entry;
 
-    console.log(playerSateResponse);
+    
     entry = playerSateResponse;
 
     document.getElementById('playerForm').innerHTML = "";
     for (let index in entry) {
-        document.getElementById('playerForm').innerHTML += "<div><input type='checkbox' name='players' id= 'c" + index + "' value = '" + entry[index] + "' onchange='toggleCheckbox()' />" + entry[index] + "</div>";
-        console.log("c" + index + "");
+        document.getElementById('playerForm').innerHTML += "<div><input type='checkbox' name='players' id= 'c" + index + "' value = '" + entry[index] + "' onchange='toggleCheckbox(this)' />" + entry[index] + "</div>";
+       index++;
     }
+    index = 0;
 }
 
-function display(msg, index) {
-    document.getElementById('myForm').innerHTML += "<div id='checked'><input type='checkbox' id= '" + index + "' value = '" + msg + "' />" + msg + "</div>";
-    if (document.getElementById("checked").checked === true) {
-        console.log('its checked');
-    }
-}
 
-function toggleCheckbox() {
+function toggleCheckbox(cb) {
     isFormNotChecked = false;
     console.log("its checked");
     checkboxlimit(document.forms.playerForm.players, 2);
-    //element.checked = !element.checked;
+    if(cb.checked == true){
+        selectedPlayer.push(cb.id);
+        }   
 }
+
+document.getElementById('submitPlayers').innerHTML += "<center><button type='submit' class='btn btn-primary btn-lg' onclick='sendInvite(selectedPlayer)'>Submit</button></center>";
 
 function checkboxlimit(checkgroup, limit) {
     for (let i = 0; i < checkgroup.length; i++) {
@@ -94,17 +95,27 @@ function checkboxlimit(checkgroup, limit) {
     }
 }
 
-/*function sendInvite() {
+/*function sendInvite(sp){
+    let playerInviteMessage = new PlayerInviteMessage(playerSub);
+    playerInviteMessage.playerStubsInvited = sp;
+    var j = playerInviteMessage.playerStubsInvited;
+    invite();
+}*/
+
+
+
+function sendInvite(sp) {
 
   const url = param + 'invite';
   let xhr = new XMLHttpRequest();
+
   let playerInviteMessage = new PlayerInviteMessage(playerSub);
-  console.log(playerInviteMessage);
+    playerInviteMessage.playerStubsInvited = sp;
   xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
           try {
               if (xhr.status == 200) {
-                  console.log(playerInviteMessage);
+                
               } else {
                   throw "something went wrong";
               }
@@ -117,7 +128,7 @@ function checkboxlimit(checkgroup, limit) {
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.send(JSON.stringify(playerInviteMessage));
 }
-}*/
+}
 
 function displayError(error) {
 
