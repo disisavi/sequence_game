@@ -46,6 +46,10 @@ public class GameController extends AbstractGameController {
         return getPlayers().get(sub);
     }
 
+    public String getDecryptedPlayerBySub(String sub) throws GeneralSecurityException {
+        return encryptionRoutine.decrypt(getPlayers().get(sub).getName(), sub);
+    }
+
 
     private Player createPlayer(IdToken.Payload loginPayload) throws GeneralSecurityException {
         String email = (String) loginPayload.get("email");
@@ -122,7 +126,7 @@ public class GameController extends AbstractGameController {
         List<Player> players = getPlayersOnline();
         players.forEach(player -> {
             try {
-                playerInfoMessage.getPlayerSateMap().put(player.getPlayerSub(), encryptionRoutine.decrypt(player.getName(), player.getPlayerSub()));
+                playerInfoMessage.getPlayerSateMap().put(player.getPlayerSub(), getDecryptedPlayerBySub(player.getPlayerSub()));
             } catch (GeneralSecurityException e) {
                 e.printStackTrace();
             }

@@ -1,13 +1,11 @@
 let isFormNotChecked = true;
 
 window.onload = function (ev) {
-
     if (playerName == null || playerSub == null) {
         displayError("Player could not be found. You are in wrong page. Will redirect you to login screen in 5 seconds")
     } else {
         document.getElementById("namePlaceHolder").innerHTML = playerName;
     }
-
     getPlayersOnline();
 };
 
@@ -94,30 +92,32 @@ function checkboxlimit(checkgroup, limit) {
     }
 }
 
-/*function sendInvite() {
+function sendInvite() {
 
-  const url = param + 'invite';
-  let xhr = new XMLHttpRequest();
-  let playerInviteMessage = new PlayerInviteMessage(playerSub);
-  console.log(playerInviteMessage);
-  xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-          try {
-              if (xhr.status == 200) {
-                  console.log(playerInviteMessage);
-              } else {
-                  throw "something went wrong";
-              }
-          } catch (err) {
-              console.log(err.message + " in " + xhr.responseText);
-              displayError("Something went wrong. Contact the developers please ");
-          }
-  };
-  xhr.open('POST', url);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.send(JSON.stringify(playerInviteMessage));
+    const url = param + 'invite';
+    let xhr = new XMLHttpRequest();
+    let playerInviteMessage = new PlayerInviteMessage(playerSub);
+    console.log(playerInviteMessage);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            try {
+                if (xhr.status === 200) {
+                    if (xhr.responseURL) {
+                        window.location.replace(xhr.responseURL);
+                    } else {
+                        throw "something went wrong";
+                    }
+                }
+            } catch (err) {
+                console.log(err.message + " in " + xhr.responseText);
+                displayError("Something went wrong. Contact the developers please ");
+            }
+        }
+        xhr.open('POST', url);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(playerInviteMessage));
+    }
 }
-}*/
 
 function displayError(error) {
 

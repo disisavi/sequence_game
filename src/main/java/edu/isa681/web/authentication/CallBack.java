@@ -64,7 +64,7 @@ public class CallBack {
         String sub = gameController.signUporInNewPlayer(payload);
         UriBuilder uriBuilder = UriBuilder.fromPath("../views/PlayerDashboard.jsp")
                 .queryParam("playerSub", sub)
-                .queryParam("playerName", gameController.getPlayerBySub(sub).getName());
+                .queryParam("playerName", gameController.getDecryptedPlayerBySub(sub));
         return Response.temporaryRedirect(uriBuilder.build()).build();
 
     }

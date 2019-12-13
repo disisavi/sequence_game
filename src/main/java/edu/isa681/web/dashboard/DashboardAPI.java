@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 @Path("/dashboard")
 public class DashboardAPI {
@@ -25,9 +27,8 @@ public class DashboardAPI {
     @Path("/invite")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response invitePlayer(PlayerInviteMessage playerInviteMessage) {
-        Response.ResponseBuilder responseBuilder = Response.status(HttpServletResponse.SC_OK);
+        String playerName = null;
         try {
-
             for (String playerStub : playerInviteMessage.getPlayerStubsInvited()) {
                 if (gameController.getPlayerBySub(playerStub) == null
                         || !(gameController.getPlayerBySub(playerStub).getPlayerSate().equals(PlayerSate.Online))) {
@@ -35,12 +36,15 @@ public class DashboardAPI {
                 }
             }
             gameController.createGame(playerInviteMessage);
-            responseBuilder.contentLocation(new URI("../views/Players.jsp"));
+            playerName = gameController.getDecryptedPlayerBySub(playerInviteMessage.getPlayerSelfStub());
         } catch (Exception ex) {
             logger.info("Game could not be created", ex);
-            responseBuilder.status(HttpServletResponse.SC_EXPECTATION_FAILED).entity(ex.getMessage());
+            return Response.status(HttpServletResponse.SC_EXPECTATION_FAILED, ex.getMessage()).build();
         }
-        return responseBuilder.build();
+        UriBuilder uriBuilder = UriBuilder.fromPath("../views/game.jsp")
+                .queryParam("playerSub", playerInviteMessage.getPlayerSelfStub())
+                .queryParam("playerName", playerName);
+        return Response.temporaryRedirect(uriBuilder.build()).build();
     }
 
     @POST
@@ -84,7 +88,6 @@ public class DashboardAPI {
             throw new IllegalStateException("No such player found");
         }
         return player.getPlayerSate().equals(PlayerSate.Invited);
-
 
     }
 
