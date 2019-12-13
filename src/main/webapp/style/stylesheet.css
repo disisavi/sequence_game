@@ -84,6 +84,20 @@ body {
     background-color: #008CBA;
 }
 
+#submit{
+    position: absolute;
+    top: 600px;
+    left: 600px;
+    text-align: center;
+}
+
+#invite{
+    position: absolute;
+    top: 600px;
+    left: 900px;
+    text-align: center;
+}
+
 * {
     box-sizing: border-box;
 }

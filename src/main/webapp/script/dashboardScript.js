@@ -79,7 +79,7 @@ function toggleCheckbox(cb) {
         }   
 }
 
-document.getElementById('submitPlayers').innerHTML += "<center><button type='submit' class='btn btn-primary btn-lg' onclick='sendInvite(selectedPlayer)'>Submit</button></center>";
+document.getElementById('submitPlayers').innerHTML += "<center><button type='submit' class='btn btn-primary btn-lg' id='submit' onclick='sendInvite(selectedPlayer)'>Submit</button></center>";
 
 function checkboxlimit(checkgroup, limit) {
     for (let i = 0; i < checkgroup.length; i++) {
@@ -102,7 +102,7 @@ function checkboxlimit(checkgroup, limit) {
     invite();
 }*/
 
-
+document.getElementById('submitPlayers').innerHTML += "<button type='button' class='btn btn-primary btn-lg' id='invite' onclick='alert('hi')'>Invite</button>";
 
 function sendInvite(sp) {
 
