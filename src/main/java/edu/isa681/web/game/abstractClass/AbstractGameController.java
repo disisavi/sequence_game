@@ -19,7 +19,7 @@ public class AbstractGameController {
         encryptionRoutine = EncryptionRoutine.getEncryptionRoutine();
     }
 
-    public ConcurrentHashMap<String, Player> getPlayers() {
+    protected ConcurrentHashMap<String, Player> getPlayers() {
         return players;
     }
 

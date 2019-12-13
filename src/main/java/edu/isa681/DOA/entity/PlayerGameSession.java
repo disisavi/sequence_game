@@ -1,6 +1,7 @@
 package edu.isa681.DOA.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.isa681.DOA.DOA;
 import edu.isa681.game.Game;
 import edu.isa681.game.items.Card;
 import edu.isa681.game.types.Chips;
@@ -17,10 +18,13 @@ public class PlayerGameSession {
     public Player player;
     @JsonIgnore
     Game game;
+    PlayerGameHistory playerGameHistory;
 
     public void placeChip(Point point, Integer cardIndex) {
         if (cardsList.size() > cardIndex && cardIndex > -1) {
             this.game.placeChip(this, point, cardIndex);
+            playerGameHistory.moves.add(point.toString());
+            DOA.getDoa().updateObject(playerGameHistory);
         } else {
             System.out.println("Card position given is out of bound... No card of such an index exist");
             System.out.println("Tried to get card -- " + cardIndex + " out of a total " + this.cardsList.size());
@@ -32,6 +36,7 @@ public class PlayerGameSession {
         this.player = player;
         this.cardsList = new ArrayList<>();
         this.numberChipsAvailable = 35;
+        this.playerGameHistory = player.addGameHistory();
     }
 
     public void pickNextCard(Card cardToThrow, Card cardToPick) {

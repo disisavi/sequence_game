@@ -3,6 +3,7 @@ package edu.isa681.DOA.entity;
 import edu.isa681.DOA.entity.type.PlayerSate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class Player {
     public Player(byte[] name, byte[] emailID) {
         this.name = name;
         this.emailID = emailID;
+        gameHistories = new ArrayList<>();
     }
 
     @Transient
@@ -79,6 +81,12 @@ public class Player {
 
     public void setGameHistories(List<PlayerGameHistory> gameHistories) {
         this.gameHistories = gameHistories;
+    }
+
+    public PlayerGameHistory addGameHistory() {
+        PlayerGameHistory playerGameHistory = new PlayerGameHistory(this);
+        this.gameHistories.add(playerGameHistory);
+        return playerGameHistory;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package edu.isa681.DOA.entity;
 
+import edu.isa681.DOA.DOA;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -14,6 +16,11 @@ public class PlayerGameHistory {
     Boolean Won;
 
     public PlayerGameHistory() {
+    }
+
+    public PlayerGameHistory(Player player) {
+        this.player = player;
+        DOA.getDoa().persistNewObject(player);
     }
 
     @Id

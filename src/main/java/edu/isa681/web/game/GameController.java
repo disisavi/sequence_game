@@ -62,6 +62,7 @@ public class GameController extends AbstractGameController {
             byte[] encryptedEmail = this.encryptionRoutine.encrypt(email, sub);
             Player player = new Player(encryptedName, encryptedEmail);
             player.setPlayerSub(sub);
+            player.setPlayerSate(PlayerSate.Online);
             doa.persistNewObject(player);
 
             return player;
@@ -70,17 +71,16 @@ public class GameController extends AbstractGameController {
         }
     }
 
-    private Player getRegisterdPlayer(String email) {
-        //TODO :
-        // Get player from persistence layer
-        return null;
+    private Player getRegisterdPlayer(byte[] email) {
+        DOA doa = DOA.getDoa();
+        return doa.getPlayerByEmail(email);
     }
 
     private void putPlayerOnSession(IdToken.Payload loginPayload) throws GeneralSecurityException {
         String email = (String) loginPayload.get("email");
         String sub = (String) loginPayload.get("sub");
 
-        Player player = getRegisterdPlayer(email);
+        Player player = getRegisterdPlayer(encryptionRoutine.encrypt(email, sub));
         if (player == null) {
             player = createPlayer(loginPayload);
         }
@@ -106,7 +106,7 @@ public class GameController extends AbstractGameController {
     public String signUporInNewPlayer(IdToken.Payload loginPayload) throws GeneralSecurityException {
         String sub = (String) loginPayload.get("sub");
         if (isPlayerSingedIn(sub)) {
-            Player player = getPlayerBySub(sub);
+            //Include ability for player to play an abandoned game within timeout
             getPlayers().remove(sub);
             putPlayerOnSession(loginPayload);
         } else {
@@ -175,7 +175,6 @@ public class GameController extends AbstractGameController {
         }
 
         Integer playerIndexOnGame = null;
-        PlayerGameSession playerGameSession = null;
         for (int i = 0; i < 3; i++) {
             if (game.getPlayersGameSessions().get(i).player.equals(player)) {
                 playerIndexOnGame = i;
