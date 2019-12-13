@@ -142,16 +142,36 @@ function sendInvite() {
             }
         }
     };
-
     xhr.open('POST', url);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify(playerInviteMessage));
     return false;
 }
 
-function displayError(error) {
 
+function onInvite() {
+    const url = param + 'redirectToGame';
+    let xhr = new XMLHttpRequest();
+    let playerInviteMessage = new PlayerInviteMessage(playerSub);
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            try {
+                if (xhr.status === 200) {
+                    if (xhr.responseURL) {
+                        window.location.replace(xhr.responseURL);
+                    } else {
+                        throw "something went wrong";
+                    }
+                }
+            } catch (err) {
+                console.log(err.message + " in " + xhr.responseText);
+                displayError("Something went wrong. Contact the developers please ");
+            }
+        }
+    };
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify(playerInviteMessage));
+    return false;
 }
-
-
-//TODO -- On invite

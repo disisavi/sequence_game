@@ -5,6 +5,7 @@ import edu.isa681.DOA.entity.PlayerGameSession;
 import edu.isa681.DOA.entity.type.PlayerSate;
 import edu.isa681.game.Game;
 import edu.isa681.game.GameState;
+import edu.isa681.web.messages.PlayerInviteMessage;
 import edu.isa681.web.messages.PlayerMove;
 import org.apache.http.HttpMessage;
 
@@ -69,11 +70,11 @@ public class GameService {
      **/
     @POST
     @Path("/playersJoined")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Boolean getPlayersJoined(String playerSub) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Boolean getPlayersJoined(PlayerInviteMessage playerSub) {
         boolean returnValue = true;
         gameController = GameController.getGameController();
-        Game gameForPlayer = gameController.getGameForPlayer(playerSub);
+        Game gameForPlayer = gameController.getGameForPlayer(playerSub.getPlayerSelfStub());
 
         if (gameForPlayer == null) {
             throw new IllegalStateException("No Such player attached to the game found");

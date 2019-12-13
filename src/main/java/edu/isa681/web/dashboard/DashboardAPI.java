@@ -16,7 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.security.GeneralSecurityException;
 
 @Path("/dashboard")
 public class DashboardAPI {
@@ -93,15 +93,17 @@ public class DashboardAPI {
 
     @POST
     @Path("/redirectToGame")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response redirectToGame(String playerSub) {
-        Response.ResponseBuilder responseBuilder = Response.status(HttpServletResponse.SC_OK);
-
-        Game game = gameController.getGameForPlayer(playerSub);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response redirectToGame(PlayerInviteMessage playerSub) throws GeneralSecurityException {
+        Game game = gameController.getGameForPlayer(playerSub.getPlayerSelfStub());
         if (game == null) {
             throw new IllegalStateException("Player is not registered to any game");
         }
 
-        return Response.seeOther(URI.create("../views/Players.jsp")).build();
+        String playerName = gameController.getDecryptedPlayerBySub(playerSub.getPlayerSelfStub());
+        UriBuilder uriBuilder = UriBuilder.fromPath("../views/game.jsp")
+                .queryParam("playerSub", playerSub.getPlayerSelfStub())
+                .queryParam("playerName", playerName);
+        return Response.seeOther(uriBuilder.build()).build();
     }
 }

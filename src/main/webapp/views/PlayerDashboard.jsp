@@ -45,8 +45,9 @@
                     <div class="col-8">
                         <form id="submitPlayers">
                             <center>
-                                <button type='button' style="visibility: hidden" class='btn btn-primary btn-lg' onclick=""
-                                        id='You have been invited to the Game'>Invite
+                                <button type='button' style="visibility: hidden" class='btn btn-primary btn-lg'
+                                        onclick="onInvite()"
+                                        id='invite'>You have been invited to the Game
                                 </button>
                             </center>
                         </form>

@@ -1,3 +1,5 @@
+let allPlayersJoined = false;
+
 function loadData() {
     const url = param + 'getBoard';
     let xhr = new XMLHttpRequest();
@@ -91,39 +93,43 @@ function calculateCellNumber(cellNumber) {
 }
 
 function submitInviteMessage() {
-    let errorID = "error";
-    let cellid = document.getElementById("IDform").value;
-    let cardIndex = document.getElementById("Cindexform").value;
-    let errorInForm = false;
+    if (allPlayersJoined) {
+        let errorID = "error";
+        let cellid = document.getElementById("IDform").value;
+        let cardIndex = document.getElementById("Cindexform").value;
+        let errorInForm = false;
 
-    if (cellid == null || cellid.length === 0) {
-        document.getElementById(errorID).innerHTML += "<div>Please enter cell number</div>";
-        errorInForm = true;
-    } else if (cellid.charAt(1) !== ',' || cellid.length !== 3) {
-        document.getElementById(errorID).innerHTML += "<div>Please enter cellID in X,Y format as displayed in the board</div>";
-        errorInForm = true
-    }
-
-    if (cardIndex == null || cardIndex.length === 0) {
-        document.getElementById(errorID).innerHTML += "<div>Please enter Card Index</div>";
-        errorInForm = true;
-    } else if (cardIndex.length !== 1) {
-        document.getElementById(errorID).innerHTML += "<div>Please enter card number as a single digit as displayed</div>";
-        errorInForm = true
-    }
-    if (!errorInForm) {
-        //Construction of message begins;
-        let playerMove = new PlayerMove(playerSub);
-        try {
-            playerMove.x = parseInt(cellid.charAt(0));
-            playerMove.y = parseInt(cellid.charAt(2));
-            playerMove.cardIndex = parseInt(cardIndex);
-            sendPlayerMove(playerMove);
-            document.getElementById(errorID).innerHTML = "";
-        } catch (ex) {
-            console.log(ex);
-            document.getElementById(errorID).innerHTML = "<div>Please use numbers only</div>";
+        if (cellid == null || cellid.length === 0) {
+            document.getElementById(errorID).innerHTML += "<div>Please enter cell number</div>";
+            errorInForm = true;
+        } else if (cellid.charAt(1) !== ',' || cellid.length !== 3) {
+            document.getElementById(errorID).innerHTML += "<div>Please enter cellID in X,Y format as displayed in the board</div>";
+            errorInForm = true
         }
+
+        if (cardIndex == null || cardIndex.length === 0) {
+            document.getElementById(errorID).innerHTML += "<div>Please enter Card Index</div>";
+            errorInForm = true;
+        } else if (cardIndex.length !== 1) {
+            document.getElementById(errorID).innerHTML += "<div>Please enter card number as a single digit as displayed</div>";
+            errorInForm = true
+        }
+        if (!errorInForm) {
+            //Construction of message begins;
+            let playerMove = new PlayerMove(playerSub);
+            try {
+                playerMove.x = parseInt(cellid.charAt(0));
+                playerMove.y = parseInt(cellid.charAt(2));
+                playerMove.cardIndex = parseInt(cardIndex);
+                sendPlayerMove(playerMove);
+                document.getElementById(errorID).innerHTML = "";
+            } catch (ex) {
+                console.log(ex);
+                document.getElementById(errorID).innerHTML = "<div>Please use numbers only</div>";
+            }
+        }
+    } else {
+        displayError("All PLayers habvent joined yet. You can only start the game once everyone joins", true)
     }
     return false;
 }
@@ -148,6 +154,30 @@ function sendPlayerMove(playerMove) {
     xhr.send(JSON.stringify(playerMove));
 }
 
+function allPlayersOnlineCheck() {
+    const url = param + 'playersJoined';
+    let playerInviteMessage = new PlayerInviteMessage(playerSub);
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            console.log(xhr.status);
+            if (xhr.status === 500) {
+                displayError(xhr.responseText, true);
+            } else if (xhr.status === 200) {
+                displayError("", true);
+                allPlayersJoined = (xhr.responseText === "true");
+                if (allPlayersJoined) {
+                    clearTimeout(allPlayersOnlineCheck);
+                }
+            }
+        }
+    };
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify(playerInviteMessage));
+    setTimeout(allPlayersOnlineCheck, 1000);
+}
+
 
 function displayError(message, clearMessage = false) {
     let errorID = "displayError";
@@ -160,4 +190,5 @@ function displayError(message, clearMessage = false) {
 window.onload = function () {
     loadData();
     getPlayerData();
+    allPlayersOnlineCheck();
 };
