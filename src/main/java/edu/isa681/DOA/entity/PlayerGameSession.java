@@ -1,7 +1,6 @@
 package edu.isa681.DOA.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import edu.isa681.DOA.DOA;
 import edu.isa681.game.Game;
 import edu.isa681.game.items.Card;
 import edu.isa681.game.types.Chips;

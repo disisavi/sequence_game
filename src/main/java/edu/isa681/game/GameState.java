@@ -2,6 +2,8 @@ package edu.isa681.game;
 
 import edu.isa681.DOA.entity.Player;
 import edu.isa681.game.items.Board;
+import edu.isa681.web.game.EncryptionRoutine;
+import edu.isa681.web.game.GameController;
 
 import java.util.List;
 
@@ -11,7 +13,7 @@ public class GameState {
     Boolean isSequenceDone;
     List<Board.Cell> boardStateSnapShot;
     Player playerWon;
-    byte[] currentPlayer;
+    String currentPlayer;
     String currentPlayerSub;
 
 
@@ -19,7 +21,6 @@ public class GameState {
         boardVersionNumber = 0;
         isSequenceDone = false;
         boardStateSnapShot = game.board.generateBoardSnapshot();
-        setCurrentPlayer(game);
     }
 
 
@@ -65,17 +66,12 @@ public class GameState {
         this.boardStateSnapShot = boardStateSnapShot;
     }
 
-    public byte[] getCurrentPlayer() {
+    public String getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public void setCurrentPlayer(byte[] currentPlayer) {
+    public void setCurrentPlayer(String currentPlayer) {
         this.currentPlayer = currentPlayer;
-    }
-
-    public void setCurrentPlayer(Game game) {
-        currentPlayer = game.playersGameSessions.get(game.turnIndex).getPlayer().getName();
-        setCurrentPlayerSub(game);
     }
 
     public String getCurrentPlayerSub() {
@@ -86,7 +82,4 @@ public class GameState {
         this.currentPlayerSub = currentPlayerSub;
     }
 
-    private void setCurrentPlayerSub(Game game) {
-        currentPlayerSub = game.playersGameSessions.get(game.turnIndex).getPlayer().getPlayerSub();
-    }
 }

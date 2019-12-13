@@ -100,6 +100,10 @@ public class DashboardAPI {
             throw new IllegalStateException("Player is not registered to any game");
         }
 
+        Player player = gameController.getPlayerBySub(playerSub.getPlayerSelfStub());
+        player.setPlayerSate(PlayerSate.Online);
+        player.setPlayer();
+
         String playerName = gameController.getDecryptedPlayerBySub(playerSub.getPlayerSelfStub());
         UriBuilder uriBuilder = UriBuilder.fromPath("../views/game.jsp")
                 .queryParam("playerSub", playerSub.getPlayerSelfStub())

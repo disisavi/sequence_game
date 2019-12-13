@@ -80,7 +80,6 @@ public class Game {
         } else {
             turnIndex++;
         }
-        gameState.setCurrentPlayer(this);
         log.info("Next turn index is " + turnIndex);
     }
 

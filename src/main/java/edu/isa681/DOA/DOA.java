@@ -6,9 +6,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class DOA {
     private static DOA doa;

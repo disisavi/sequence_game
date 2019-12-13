@@ -117,11 +117,15 @@ public class GameController extends AbstractGameController {
         return sub;
     }
 
-    public synchronized void createGame(PlayerInviteMessage playerInviteMessage) {
+    public synchronized void createGame(PlayerInviteMessage playerInviteMessage) throws GeneralSecurityException {
         List<Player> playersToPlay = new ArrayList<>();
         playerInviteMessage.getPlayerStubsInvited().forEach(elt -> playersToPlay.add(getPlayerBySub(elt)));
         Game newGame = new Game(playersToPlay);
+        setTurnInGame(newGame);
         getGames().add(newGame);
+        Player player = getPlayerBySub(playerInviteMessage.getPlayerSelfStub());
+        player.setPlayerSate(PlayerSate.Online);
+        player.setPlayer();
     }
 
     public void playerOnlineRightNow(PlayerInfoMessage playerInfoMessage) {
@@ -167,7 +171,7 @@ public class GameController extends AbstractGameController {
         return gameForPlayer;
     }
 
-    public void moveChip(PlayerMove playerMove) {
+    public void moveChip(PlayerMove playerMove) throws GeneralSecurityException {
         Game game = this.getGameForPlayer(playerMove.getPlayerSub());
         Player player = gameController.getPlayerBySub(playerMove.getPlayerSub());
         if (game == null) {
@@ -197,6 +201,15 @@ public class GameController extends AbstractGameController {
             illegalStateException.printStackTrace();
             throw illegalStateException;
         }
-        game.checkSequenceAndNextTurn(game.getPlayersGameSessions().get(playerIndexOnGame));
+        if (game.checkSequenceAndNextTurn(game.getPlayersGameSessions().get(playerIndexOnGame))) {
+            setTurnInGame(game);
+        }
+    }
+
+    void setTurnInGame(Game game) throws GeneralSecurityException {
+        Player player1 = game.getPlayersGameSessions().get(game.getTurnIndex()).player;
+        String playerName = EncryptionRoutine.getEncryptionRoutine().decrypt(player1.getName(), player1.getPlayerSub());
+        game.getGameState().setCurrentPlayer(playerName);
+        game.getGameState().setCurrentPlayerSub(player1.getPlayerSub());
     }
 }
