@@ -84,6 +84,6 @@ body {
     background-color: #008CBA;
 }
 
-* {
-    box-sizing: border-box;
+.row-containers {
+    height: 300px;
 }

@@ -1,12 +1,15 @@
 let isFormNotChecked = true;
+let selectedPlayer = [];
+let isInvited = false;
 
-window.onload = function (ev) {
+window.onload = function () {
     if (playerName == null || playerSub == null) {
         displayError("Player could not be found. You are in wrong page. Will redirect you to login screen in 5 seconds")
     } else {
         document.getElementById("namePlaceHolder").innerHTML = playerName;
     }
     getPlayersOnline();
+    isPlayerInvited()
 };
 
 
@@ -34,10 +37,39 @@ function getPlayersOnline() {
         xhr.open('POST', url);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(playerInviteMessage));
-        setTimeout(getPlayersOnline, 5000);
     }
-
+    setTimeout(getPlayersOnline, 1000);
 }
+
+function isPlayerInvited() {
+
+    const url = param + 'isInvited';
+    let xhr = new XMLHttpRequest();
+
+    let playerInviteMessage = new PlayerInviteMessage(playerSub);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            try {
+                if (xhr.status === 200) {
+                    isInvited = (xhr.responseText === "true");
+                    if (isInvited) {
+                        document.getElementById("invite").style.visibility = "visible";
+                    }
+                } else {
+                    throw "something went wrong";
+                }
+            } catch (err) {
+                console.log(err.message + " in " + xhr.responseText);
+                displayError("Something went wrong. Contact the developers please ");
+            }
+        }
+    };
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify(playerInviteMessage));
+    setTimeout(isPlayerInvited, 1000);
+}
+
 
 function generatePlayerMap(response) {
     let responseJson = JSON.parse(response)
@@ -52,52 +84,48 @@ function generatePlayerMap(response) {
 
 
 function drawForm(playerSateResponse) {
-    let entry;
-
-    console.log(playerSateResponse);
-    entry = playerSateResponse;
-
+    let entry = playerSateResponse;
+    let iterable = 0;
     document.getElementById('playerForm').innerHTML = "";
     for (let index in entry) {
-        document.getElementById('playerForm').innerHTML += "<div><input type='checkbox' name='players' id= 'c" + index + "' value = '" + entry[index] + "' onchange='toggleCheckbox()' />" + entry[index] + "</div>";
-        console.log("c" + index + "");
+        document.getElementById('playerForm').innerHTML += "<div><input type='checkbox' name='players' id= 'c" + index + "' value = '" + index + "' onchange='toggleCheckbox(this)'/>" + entry[index] + "</div>";
+        iterable++;
+    }
+    if (iterable > 1) {
+        document.getElementById("playerForm").innerHTML += "<button type = 'button' class = 'btn btn-primary btn-lg' id='submit' onclick = 'sendInvite()'>Submit</button>";
+        document.getElementById("HeadingPlaceholder").innerHTML = " Please select two players below to invite for the next game"
+    } else {
+        document.getElementById("HeadingPlaceholder").innerHTML = " There are not enough players for us to play right now. Lets wait for more players to join"
     }
 }
 
-function display(msg, index) {
-    document.getElementById('myForm').innerHTML += "<div id='checked'><input type='checkbox' id= '" + index + "' value = '" + msg + "' />" + msg + "</div>";
-    if (document.getElementById("checked").checked === true) {
-        console.log('its checked');
-    }
-}
 
-function toggleCheckbox() {
+function toggleCheckbox(cb) {
     isFormNotChecked = false;
-    console.log("its checked");
-    checkboxlimit(document.forms.playerForm.players, 2);
-    //element.checked = !element.checked;
-}
+    if (cb.checked === true) {
+        selectedPlayer.push(cb.value);
+    } else {
+        let index = selectedPlayer.indexOf(cb.id);
+        selectedPlayer.splice(index, 1);
+    }
 
-function checkboxlimit(checkgroup, limit) {
-    for (let i = 0; i < checkgroup.length; i++) {
-        checkgroup[i].onclick = function () {
-            let checkedcount = 0;
-            for (var i = 0; i < checkgroup.length; i++)
-                checkedcount += (checkgroup[i].checked) ? 1 : 0;
-            if (checkedcount > limit) {
-                alert("You can only select a maximum of " + limit + " players");
-                this.checked = false
-            }
-        }
+    if (selectedPlayer.length > 2) {
+        alert("You can only select a maximum of " + limit + " players");
+    }
+    if (selectedPlayer.length === 0) {
+        isFormNotChecked = true;
     }
 }
+
 
 function sendInvite() {
-
+    if (selectedPlayer.length !== 2) {
+        alert("Please select 2 people to play with");
+    }
     const url = param + 'invite';
     let xhr = new XMLHttpRequest();
     let playerInviteMessage = new PlayerInviteMessage(playerSub);
-    console.log(playerInviteMessage);
+    selectedPlayer.forEach(elt => playerInviteMessage.playerStubsInvited.push(elt));
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             try {
@@ -113,12 +141,17 @@ function sendInvite() {
                 displayError("Something went wrong. Contact the developers please ");
             }
         }
-        xhr.open('POST', url);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify(playerInviteMessage));
-    }
+    };
+
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify(playerInviteMessage));
+    return false;
 }
 
 function displayError(error) {
 
 }
+
+
+//TODO -- On invite

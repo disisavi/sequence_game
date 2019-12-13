@@ -1,5 +1,6 @@
 package edu.isa681.DOA.entity;
 
+import edu.isa681.DOA.DOA;
 import edu.isa681.DOA.entity.type.PlayerSate;
 
 import javax.persistence.*;
@@ -29,6 +30,7 @@ public class Player {
     @Transient
     public PlayerGameSession getNewPlayerSession() {
         this.playerSate = PlayerSate.Invited;
+        this.addGameHistory();
         return new PlayerGameSession(this);
     }
 
@@ -83,15 +85,25 @@ public class Player {
         this.gameHistories = gameHistories;
     }
 
-    public PlayerGameHistory addGameHistory() {
-        PlayerGameHistory playerGameHistory = new PlayerGameHistory(this);
+    public void addGameHistory() {
+        PlayerGameHistory playerGameHistory = new PlayerGameHistory();
+        playerGameHistory.setPlayer(this);
         this.gameHistories.add(playerGameHistory);
-        return playerGameHistory;
     }
 
     @Override
     public boolean equals(Object obj) {
         return Arrays.equals(((Player) obj).emailID, this.emailID);
+    }
+
+    public void setPlayer() {
+        DOA doa = DOA.getDoa();
+        doa.getNewSession();
+        doa.updateObject(this);
+        for (PlayerGameHistory playerGameHistory : getGameHistories()) {
+            doa.updateObject(playerGameHistory);
+        }
+        doa.commit();
     }
 }
 

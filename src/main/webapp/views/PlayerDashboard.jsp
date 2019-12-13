@@ -15,6 +15,7 @@
             type="javascript"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             type="javascript"></script>
+    <link href="../style/stylesheet.css" rel="stylesheet"/>
 </head>
 <body>
 <!--[if IE]>
@@ -29,9 +30,31 @@
         <hr class="my-4">
     </div>
     <div>
-        <h3> Please select two players below to invite for the next game</h3>
-        <form id="playerForm" name="submitplayer" method="get">
-        </form>
+        <div>
+            <div class="row row-containers">
+                <div class="col-4">
+                    <h3><span id="HeadingPlaceholder"></span></h3>
+                    <form id="playerForm">
+                    </form>
+                </div>
+            </div>
+            <footer>
+                <div class="row">
+                    <%--                Boiler Plate to make invite button in the middle--%>
+                    <div class="col-2"></div>
+                    <div class="col-8">
+                        <form id="submitPlayers">
+                            <center>
+                                <button type='button' style="visibility: hidden" class='btn btn-primary btn-lg' onclick=""
+                                        id='You have been invited to the Game'>Invite
+                                </button>
+                            </center>
+                        </form>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+            </footer>
+        </div>
     </div>
 </div>
 <script>

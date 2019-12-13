@@ -24,7 +24,7 @@ public class PlayerGameSession {
         if (cardsList.size() > cardIndex && cardIndex > -1) {
             this.game.placeChip(this, point, cardIndex);
             playerGameHistory.moves.add(point.toString());
-            DOA.getDoa().updateObject(playerGameHistory);
+            this.player.setPlayer();
         } else {
             System.out.println("Card position given is out of bound... No card of such an index exist");
             System.out.println("Tried to get card -- " + cardIndex + " out of a total " + this.cardsList.size());
@@ -36,7 +36,7 @@ public class PlayerGameSession {
         this.player = player;
         this.cardsList = new ArrayList<>();
         this.numberChipsAvailable = 35;
-        this.playerGameHistory = player.addGameHistory();
+        this.playerGameHistory = player.getGameHistories().get(player.getGameHistories().size() - 1);
     }
 
     public void pickNextCard(Card cardToThrow, Card cardToPick) {

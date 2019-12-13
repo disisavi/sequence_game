@@ -56,36 +56,32 @@ public class GameController extends AbstractGameController {
         String email = (String) loginPayload.get("email");
         String name = (String) loginPayload.get("name");
         String sub = (String) loginPayload.get("sub");
-        DOA doa = DOA.getDoa();
         if (Util.validateEmailID(email)) {
             byte[] encryptedName = this.encryptionRoutine.encrypt(name, sub);
             byte[] encryptedEmail = this.encryptionRoutine.encrypt(email, sub);
             Player player = new Player(encryptedName, encryptedEmail);
             player.setPlayerSub(sub);
-            player.setPlayerSate(PlayerSate.Online);
-            doa.persistNewObject(player);
-
             return player;
         } else {
             throw new IllegalStateException("Invalid Email");
         }
     }
 
-    private Player getRegisterdPlayer(byte[] email) {
+    private Player getRegisterdPlayer(String sub) {
         DOA doa = DOA.getDoa();
-        return doa.getPlayerByEmail(email);
+        return doa.getPlayerByEmail(sub);
     }
 
-    private void putPlayerOnSession(IdToken.Payload loginPayload) throws GeneralSecurityException {
-        String email = (String) loginPayload.get("email");
+    private synchronized void putPlayerOnSession(IdToken.Payload loginPayload) throws GeneralSecurityException {
         String sub = (String) loginPayload.get("sub");
 
-        Player player = getRegisterdPlayer(encryptionRoutine.encrypt(email, sub));
+        Player player = getRegisterdPlayer(sub);
         if (player == null) {
             player = createPlayer(loginPayload);
         }
         getPlayers().put(sub, player);
         player.setPlayerSate(PlayerSate.Online);
+        player.setPlayer();
     }
 
     /**
@@ -105,13 +101,19 @@ public class GameController extends AbstractGameController {
      */
     public String signUporInNewPlayer(IdToken.Payload loginPayload) throws GeneralSecurityException {
         String sub = (String) loginPayload.get("sub");
-        if (isPlayerSingedIn(sub)) {
-            //Include ability for player to play an abandoned game within timeout
-            getPlayers().remove(sub);
-            putPlayerOnSession(loginPayload);
-        } else {
-            putPlayerOnSession(loginPayload);
+        try {
+            if (isPlayerSingedIn(sub)) {
+                //Include ability for player to play an abandoned game within timeout
+                getPlayers().remove(sub);
+                putPlayerOnSession(loginPayload);
+            } else {
+                putPlayerOnSession(loginPayload);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw ex;
         }
+
         return sub;
     }
 

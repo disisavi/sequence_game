@@ -39,6 +39,7 @@ public class DashboardAPI {
             playerName = gameController.getDecryptedPlayerBySub(playerInviteMessage.getPlayerSelfStub());
         } catch (Exception ex) {
             logger.info("Game could not be created", ex);
+            ex.printStackTrace();
             return Response.status(HttpServletResponse.SC_EXPECTATION_FAILED, ex.getMessage()).build();
         }
         UriBuilder uriBuilder = UriBuilder.fromPath("../views/game.jsp")
@@ -79,11 +80,10 @@ public class DashboardAPI {
 
     @POST
     @Path("/isInvited")
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Boolean isInvited(String playerSub) {
-
-        Player player = gameController.getPlayerBySub(playerSub);
+    public Boolean isInvited(PlayerInviteMessage playerSub) {
+        Player player = gameController.getPlayerBySub(playerSub.getPlayerSelfStub());
         if (player == null) {
             throw new IllegalStateException("No such player found");
         }
@@ -104,5 +104,4 @@ public class DashboardAPI {
 
         return Response.seeOther(URI.create("../views/Players.jsp")).build();
     }
-    //todo --> Merge with stashed changes
 }

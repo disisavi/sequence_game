@@ -132,6 +132,7 @@ public class GameService {
             gameController.moveChip(playerMove);
             return Response.status(HttpServletResponse.SC_OK).build();
         } catch (Exception ex) {
+            ex.printStackTrace();
             return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
                     .entity(ex.getMessage())
                     .type(MediaType.TEXT_PLAIN)

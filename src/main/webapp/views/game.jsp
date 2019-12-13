@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         <div class="col-auto">
-                            <button type="button" class="btn btn-primary mb-2" onClick="submitInviteMessage()">Submit
+                            <button type="button" class="btn btn-primary mb-2" onClick="submitInviteMessage()">
                             </button>
                         </div>
                         <div id="error" class="error"></div>

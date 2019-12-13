@@ -138,9 +138,9 @@ function sendPlayerMove(playerMove) {
             if (xhr.status === 500) {
                 displayError(xhr.responseText, true);
             } else if (xhr.status === 200) {
-                getPlayerData();
                 displayError("", true);
             }
+            getPlayerData();
         }
     };
     xhr.open('POST', url);

@@ -1,5 +1,6 @@
 package edu.isa681.game;
 
+import edu.isa681.DOA.DOA;
 import edu.isa681.DOA.entity.Player;
 import edu.isa681.DOA.entity.PlayerGameSession;
 import edu.isa681.DOA.entity.type.PlayerSate;
@@ -14,6 +15,7 @@ import org.apache.log4j.Logger;
 import java.awt.*;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Game {
@@ -49,9 +51,10 @@ public class Game {
     private void initPlayerSession(List<Player> players) {
         log.info("New Player session initiation started");
         for (Player player : players) {
-            if (player.getPlayerSate() == PlayerSate.Invited) {
+            if (player.getPlayerSate() == PlayerSate.Online) {
                 this.playersGameSessions.add(player.getNewPlayerSession());
-                log.info("Session for Player " + player.getName() + "Initiated");
+                player.setPlayer();
+                log.info("Session for Player " + Arrays.toString(player.getName()) + "Initiated");
             } else {
                 IllegalStateException exception = new IllegalStateException("Player " + player.getName() + " is not available to play a game right now");
                 log.info("Game initiation failed ", exception);
