@@ -20,10 +20,10 @@ class GameTest {
 
     @BeforeEach
     void setup() {
-        player1 = new Player("Avi", "a@gmail.com");
-        player2 = new Player("sravya", "a@gmail.com");
-        player3 = new Player("sinchu", "a@gmail.com");
-        player4 = new Player("Prasad", "a@gmail.com");
+        player1 = new Player("Avi".getBytes(), "a@gmail.com".getBytes());
+        player2 = new Player("sravya".getBytes(), "a@gmail.com".getBytes());
+        player3 = new Player("sinchu".getBytes(), "a@gmail.com".getBytes());
+        player4 = new Player("Prasad".getBytes(), "a@gmail.com".getBytes());
         player1.setPlayerSate(PlayerSate.Invited);
         player2.setPlayerSate(PlayerSate.Invited);
         player3.setPlayerSate(PlayerSate.Invited);

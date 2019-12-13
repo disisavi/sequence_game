@@ -1,16 +1,13 @@
 package edu.isa681.web.game;
 
+import com.google.api.client.json.Json;
 import com.google.cloud.storage.StorageException;
-import com.google.crypto.tink.Aead;
-import com.google.crypto.tink.CleartextKeysetHandle;
-import com.google.crypto.tink.JsonKeysetWriter;
-import com.google.crypto.tink.KeysetHandle;
+import com.google.crypto.tink.*;
 import com.google.crypto.tink.aead.AeadConfig;
 import com.google.crypto.tink.aead.AeadKeyTemplates;
 import edu.isa681.DOA.util.CloudStorage;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.security.GeneralSecurityException;
 
 public class EncryptionRoutine {
@@ -53,8 +50,9 @@ public class EncryptionRoutine {
         try {
             AeadConfig.register();
             CloudStorage cloudStorage = new CloudStorage();
-            if (cloudStorage.keyOnCloud(keysetFilename) == null) {
-                File file = new File(keysetFilename);
+            String keyOnCloud = cloudStorage.keyOnCloud(keysetFilename);
+            File file = new File(keysetFilename);
+            if (keyOnCloud == null) {
                 KeysetHandle keysetHandle = KeysetHandle.generateNew(AeadKeyTemplates.AES128_GCM);
                 this.keysetHandle = keysetHandle;
                 CleartextKeysetHandle.write(keysetHandle, JsonKeysetWriter.withFile(file));
@@ -64,7 +62,13 @@ public class EncryptionRoutine {
                     ex.printStackTrace();
                     System.out.println("Will read from the file locally for now");
                 }
-            }//TODO -- > Write the else for this.
+            } else {
+                FileWriter fileWriter = new FileWriter(file);
+                fileWriter.write(keyOnCloud);
+                fileWriter.close();
+
+                this.keysetHandle = CleartextKeysetHandle.read(JsonKeysetReader.withFile(file));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
