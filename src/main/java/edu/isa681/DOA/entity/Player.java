@@ -2,20 +2,29 @@ package edu.isa681.DOA.entity;
 
 import edu.isa681.DOA.entity.type.PlayerSate;
 
+import javax.persistence.*;
 import java.util.Arrays;
+import java.util.List;
 
+@Entity
+@Table
 public class Player {
     byte[] name;
     byte[] emailID;
     Integer playerID;
     PlayerSate playerSate;
     String playerSub;
+    List<PlayerGameHistory> gameHistories;
+
+    public Player() {
+    }
 
     public Player(byte[] name, byte[] emailID) {
         this.name = name;
         this.emailID = emailID;
     }
 
+    @Transient
     public PlayerGameSession getNewPlayerSession() {
         this.playerSate = PlayerSate.Invited;
         return new PlayerGameSession(this);
@@ -37,6 +46,8 @@ public class Player {
         this.emailID = emailID;
     }
 
+    @Id
+    @GeneratedValue
     public Integer getPlayerID() {
         return playerID;
     }
@@ -59,6 +70,15 @@ public class Player {
 
     public void setPlayerSub(String playerSub) {
         this.playerSub = playerSub;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY)
+    public List<PlayerGameHistory> getGameHistories() {
+        return gameHistories;
+    }
+
+    public void setGameHistories(List<PlayerGameHistory> gameHistories) {
+        this.gameHistories = gameHistories;
     }
 
     @Override

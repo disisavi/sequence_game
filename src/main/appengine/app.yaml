@@ -7,3 +7,8 @@ runtime_config:   # Optional
 
 automatic_scaling:
   max_num_instances: 1
+
+# [START env_variables]
+env_variables:    # Logging options
+  JAVA_OPTS: >-
+    -D.level=INFO

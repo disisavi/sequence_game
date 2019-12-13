@@ -1,6 +1,7 @@
 package edu.isa681.web.game;
 
 import com.google.api.client.auth.openidconnect.IdToken;
+import edu.isa681.DOA.DOA;
 import edu.isa681.DOA.entity.Player;
 import edu.isa681.DOA.entity.PlayerGameSession;
 import edu.isa681.DOA.entity.type.PlayerSate;
@@ -55,14 +56,14 @@ public class GameController extends AbstractGameController {
         String email = (String) loginPayload.get("email");
         String name = (String) loginPayload.get("name");
         String sub = (String) loginPayload.get("sub");
+        DOA doa = DOA.getDoa();
         if (Util.validateEmailID(email)) {
             byte[] encryptedName = this.encryptionRoutine.encrypt(name, sub);
             byte[] encryptedEmail = this.encryptionRoutine.encrypt(email, sub);
-
             Player player = new Player(encryptedName, encryptedEmail);
             player.setPlayerSub(sub);
-//        TODO :
-//        Put it on database
+            doa.persistNewObject(player);
+
             return player;
         } else {
             throw new IllegalStateException("Invalid Email");
