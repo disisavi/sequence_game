@@ -121,8 +121,6 @@ public class GameService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response moveChip(PlayerMove playerMove) {
         try {
-
-
             if (playerMove.getPlayerSub() == null) {
                 IllegalStateException illegalStateException = new IllegalStateException("Player Information Not provided");
                 illegalStateException.printStackTrace();

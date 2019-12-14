@@ -101,7 +101,7 @@ public class DashboardAPI {
         }
 
         Player player = gameController.getPlayerBySub(playerSub.getPlayerSelfStub());
-        player.setPlayerSate(PlayerSate.Online);
+        player.setPlayerSate(PlayerSate.Playing);
         player.setPlayer();
 
         String playerName = gameController.getDecryptedPlayerBySub(playerSub.getPlayerSelfStub());

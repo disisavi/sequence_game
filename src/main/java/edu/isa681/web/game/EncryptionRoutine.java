@@ -52,7 +52,7 @@ public class EncryptionRoutine {
             CloudStorage cloudStorage = new CloudStorage();
             String keyOnCloud = cloudStorage.keyOnCloud(keysetFilename);
             File file = new File(keysetFilename);
-            if (keyOnCloud == null) {
+            if (keyOnCloud == null && !file.exists()) {
                 KeysetHandle keysetHandle = KeysetHandle.generateNew(AeadKeyTemplates.AES128_GCM);
                 this.keysetHandle = keysetHandle;
                 CleartextKeysetHandle.write(keysetHandle, JsonKeysetWriter.withFile(file));
@@ -62,11 +62,12 @@ public class EncryptionRoutine {
                     ex.printStackTrace();
                     System.out.println("Will read from the file locally for now");
                 }
+            } else if (file.exists()) {
+                this.keysetHandle = CleartextKeysetHandle.read(JsonKeysetReader.withFile(file));
             } else {
                 FileWriter fileWriter = new FileWriter(file);
                 fileWriter.write(keyOnCloud);
                 fileWriter.close();
-
                 this.keysetHandle = CleartextKeysetHandle.read(JsonKeysetReader.withFile(file));
             }
         } catch (IOException e) {

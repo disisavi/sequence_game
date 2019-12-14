@@ -77,5 +77,6 @@
 </script>
 <script src="../script/gamescript.js"></script>
 <script src="../script/messageClasses/PlayerMove.js"></script>
+<script src="../script/messageClasses/PlayerInviteMessage.js"></script>
 </body>
 </html>

@@ -124,7 +124,7 @@ public class GameController extends AbstractGameController {
         setTurnInGame(newGame);
         getGames().add(newGame);
         Player player = getPlayerBySub(playerInviteMessage.getPlayerSelfStub());
-        player.setPlayerSate(PlayerSate.Online);
+        player.setPlayerSate(PlayerSate.Playing);
         player.setPlayer();
     }
 
@@ -201,7 +201,7 @@ public class GameController extends AbstractGameController {
             illegalStateException.printStackTrace();
             throw illegalStateException;
         }
-        if (game.checkSequenceAndNextTurn(game.getPlayersGameSessions().get(playerIndexOnGame))) {
+        if (!game.checkSequenceAndNextTurn(game.getPlayersGameSessions().get(playerIndexOnGame))) {
             setTurnInGame(game);
         }
     }

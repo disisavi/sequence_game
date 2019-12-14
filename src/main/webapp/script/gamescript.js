@@ -164,7 +164,6 @@ function allPlayersOnlineCheck() {
             if (xhr.status === 500) {
                 displayError(xhr.responseText, true);
             } else if (xhr.status === 200) {
-                displayError("", true);
                 allPlayersJoined = (xhr.responseText === "true");
                 if (allPlayersJoined) {
                     clearTimeout(allPlayersOnlineCheck);
@@ -175,7 +174,7 @@ function allPlayersOnlineCheck() {
     xhr.open('POST', url);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify(playerInviteMessage));
-    setTimeout(allPlayersOnlineCheck, 1000);
+    setTimeout(allPlayersOnlineCheck, 2000);
 }
 
 
