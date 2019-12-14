@@ -60,12 +60,15 @@
 </div>
 <script>
     <% String param = Params.getDashboardParam();%>
+    <% String hb = Params.getHeartBeat();%>
     const param = "<%=param%>";
+    const hb = "<%=hb%>";
     const playerName = '<%=request.getParameter("playerName")%>';
     const playerSub = '<%=request.getParameter("playerSub")%>';
 </script>
 <script src="../script/messageClasses/PlayerInviteMessage.js" type="text/javascript"></script>
 <script src="../script/messageClasses/PlayerInfoMessage.js" type="text/javascript"></script>
 <script src="../script/dashboardScript.js" type="text/javascript"></script>
+<script src="../script/clientHeartBeat.js" type="text/javascript"></script>
 </body>
 </html>

@@ -43,6 +43,14 @@ public class GameController extends AbstractGameController {
         return getPlayers().containsKey(sub);
     }
 
+    private Boolean isPlayerAvailable(String sub) {
+        return getPlayerBySub(sub).getPlayerSate() == PlayerSate.GamePauseOff;
+    }
+
+    private Boolean isPlayerOnline(String sub) {
+        return getPlayerBySub(sub).getPlayerSate() == PlayerSate.Online;
+    }
+
     public Player getPlayerBySub(String sub) {
         return getPlayers().get(sub);
     }
@@ -104,12 +112,18 @@ public class GameController extends AbstractGameController {
         try {
             if (isPlayerSingedIn(sub)) {
                 //Include ability for player to play an abandoned game within timeout
-                getPlayers().remove(sub);
-                putPlayerOnSession(loginPayload);
+                if (isPlayerAttachedToGame(sub) && isPlayerAvailable(sub)) {
+                    getPlayerBySub(sub).setPlayerSate(PlayerSate.Invited);
+                    getPlayerBySub(sub).setPlayer();
+                } else {
+                    getPlayers().remove(sub);
+                    putPlayerOnSession(loginPayload);
+                }
             } else {
                 putPlayerOnSession(loginPayload);
             }
-        } catch (Exception ex) {
+        } catch (
+                Exception ex) {
             ex.printStackTrace();
             throw ex;
         }

@@ -71,6 +71,8 @@
 
 <script language="javascript">
     <% String param = Params.getBoardParam();%>
+    <% String hb = Params.getHeartBeat();%>
+    const hb = "<%=hb%>";
     const param = "<%=param%>";
     const playerName = '<%=request.getParameter("playerName")%>';
     const playerSub = '<%=request.getParameter("playerSub")%>';
@@ -78,5 +80,6 @@
 <script src="../script/gamescript.js"></script>
 <script src="../script/messageClasses/PlayerMove.js"></script>
 <script src="../script/messageClasses/PlayerInviteMessage.js"></script>
+<script src="../script/clientHeartBeat.js" type="text/javascript"></script>
 </body>
 </html>
