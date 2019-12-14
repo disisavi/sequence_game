@@ -3,7 +3,7 @@ package edu.isa681.web.hearbeat;
 import edu.isa681.web.game.GameController;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import java.util.Date;
@@ -12,7 +12,7 @@ import java.util.Date;
 public class HeartBeat {
     GameController gameController = GameController.getGameController();
 
-    @GET
+    @POST
     @Consumes(MediaType.TEXT_PLAIN)
     public void heartBeat(String playerSub) {
         if (gameController.getHeartBeatMap().get(playerSub) != null) {

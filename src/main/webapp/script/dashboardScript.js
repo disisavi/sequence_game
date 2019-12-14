@@ -9,7 +9,8 @@ window.onload = function () {
         document.getElementById("namePlaceHolder").innerHTML = playerName;
     }
     getPlayersOnline();
-    isPlayerInvited()
+    isPlayerInvited();
+    sendHB();
 };
 
 

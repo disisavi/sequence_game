@@ -7,11 +7,12 @@
     <session-factory>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://35.245.214.163/thegame</property>
+        <property name="hibernate.connection.url">jdbc:mysql://thegame.c4gzzb4kimit.us-east-2.rds.amazonaws.com/thegame
+        </property>
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
-        <property name="connection.username">game</property>
-        <property name="connection.password">Chacha495.</property>
+        <property name="connection.username">admin</property>
+        <property name="connection.password">Chacha495</property>
 
         <property name="hibernate.hbm2ddl.auto">update</property>
 

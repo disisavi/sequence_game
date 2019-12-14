@@ -1,7 +1,7 @@
 package edu.isa681.web.server;
 
 public class Params {
-    private static Boolean isProd = false;
+    private static Boolean isProd = true;
     private static Boolean isIDE = true;
 
     public static String getLoginParam() {
@@ -49,9 +49,9 @@ public class Params {
             return "https://sequencegame.appspot.com/sq/redirectToGame";
         }
         if (isIDE) {
-            return "http://localhost:8080/seq/sq/redirectToGame";
+            return "http://localhost:8080/seq/sq/heartBeat";
         }
-        return "http://localhost:8080/sq/redirectToGame";
+        return "http://localhost:8080/sq/heartBeat";
     }
 
 }

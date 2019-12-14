@@ -190,4 +190,5 @@ window.onload = function () {
     loadData();
     getPlayerData();
     allPlayersOnlineCheck();
+    sendHB();
 };

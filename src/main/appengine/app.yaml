@@ -12,3 +12,6 @@ automatic_scaling:
 env_variables:    # Logging options
   JAVA_OPTS: >-
     -D.level=INFO
+
+beta_settings:
+  cloud_sql_instances: sequencegame:us-east4:seqgame=tcp:1433

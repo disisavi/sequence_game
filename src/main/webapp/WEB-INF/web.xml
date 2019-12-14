@@ -30,14 +30,22 @@
         <servlet-class>edu.isa681.web.game.InitServelt</servlet-class>
         <load-on-startup>2</load-on-startup>
     </servlet>
-    <!--    <filter>-->
-    <!--        <filter-name>LandingFilter</filter-name>-->
-    <!--        <filter-class>edu.isa681.web.landingpage.LandingFilter</filter-class>-->
-    <!--    </filter>-->
-    <!--    <filter-mapping>-->
-    <!--        <filter-name>LandingFilter</filter-name>-->
-    <!--        <url-pattern>/index</url-pattern>-->
-    <!--    </filter-mapping>-->
+
+    <filter>
+        <filter-name>HeaderFilter</filter-name>
+        <filter-class>org.eclipse.jetty.servlets.HeaderFilter</filter-class>
+        <init-param>
+            <param-name>headerConfig</param-name>
+            <param-value>
+                set X-Frame-Options: DENY,
+                "add Cache-Control: no-cache, no-store, must-revalidate",
+                setDate Expires: 31540000000,
+                addDate Date: 0
+            </param-value>
+        </init-param>
+    </filter>
+
+
     <servlet-mapping>
         <servlet-name>WebService</servlet-name>
         <url-pattern>/sq/*</url-pattern>

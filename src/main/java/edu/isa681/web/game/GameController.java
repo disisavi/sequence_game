@@ -15,6 +15,7 @@ import edu.isa681.web.messages.PlayerMove;
 import java.awt.*;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -88,6 +89,7 @@ public class GameController extends AbstractGameController {
             player = createPlayer(loginPayload);
         }
         getPlayers().put(sub, player);
+        getHeartBeatMap().put(sub, new Date());
         player.setPlayerSate(PlayerSate.Online);
         player.setPlayer();
     }
