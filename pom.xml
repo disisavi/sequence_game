@@ -54,7 +54,7 @@
         <jetty.maven.plugin>9.4.24.v20191120</jetty.maven.plugin>
         <jersey.maven.plugin>2.29.1</jersey.maven.plugin>
         <hibernate.version>4.3.6.Final</hibernate.version>
-        <mysql.connector.version>5.1.31</mysql.connector.version>
+        <mysql.connector.version>8.0.16</mysql.connector.version>
     </properties>
 
     <dependencies>
